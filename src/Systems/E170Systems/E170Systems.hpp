@@ -1,22 +1,41 @@
 #pragma once
 
+#include <vector>
+#include <functional>
+#include <memory>
+
+#include "Electrical/Electrical.hpp"
+#include "Hydraulic/Hydraulic.hpp"
+#include "Shared/SystemStruct.hpp"
 #include "System/System.hpp"
 
-namespace E170Systems {
-    class E170Systems {
-    public:
-        explicit E170Systems(const E170SystemInitializer &init);
+#define EXTERNAL_SYSTEMS
 
-        ~E170Systems();
+namespace E170Systems {
+    class E170SystemsRoot {
+    public:
+        explicit E170SystemsRoot(SystemState &state);
+
+        ~E170SystemsRoot();
 
 
         void Run();
+#ifdef EXTERNAL_SYSTEMS
 
     private:
-        void Update(float deltaTime);
+        void Update(float deltaTime) const;
+#else
+        void Update(float deltaTime) const;
 
-        E170SystemInitializer m_InitData;
+    private:
+#endif
 
         float m_DeltaTime;
+        bool m_Running;
+
+        std::unique_ptr<HydraulicSystem> m_HydraulicSystem;
+        std::unique_ptr<ElectricalSystem> m_ElectricalSystem;
+
+        std::vector<std::function<void(float)>> m_UpdateFunctions;
     };
 } // namespace E170Systems

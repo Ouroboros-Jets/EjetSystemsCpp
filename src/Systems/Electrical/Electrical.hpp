@@ -1,10 +1,11 @@
 #pragma once
 
+#include "State/State.hpp"
 #include "System/System.hpp"
 
-class Electrical final : public System {
+class ElectricalSystem final : public System {
 public:
-    explicit Electrical(E170SystemInitializer &state);
+    explicit ElectricalSystem(const ElectricalVars &state);
 
     void Update(float dt) override;
 };

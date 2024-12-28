@@ -1,24 +1,32 @@
 cmake_minimum_required(VERSION 3.4...3.30 FATAL_ERROR)
-project(EjetSystems VERSION 0.1 LANGUAGES CXX C)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+include(cmake/colors.cmake)
 
-if (DEFINED ENV{VULKAN_SDK})
-    message(STATUS "VULKAN_SDK is set to: $ENV{VULKAN_SDK}")
+if (WIN32)
+    set(VCPKG_TRIPLET "x64-windows")
 else ()
-    message(FATAL_ERROR "VULKAN_SDK environment variable is not set, please add it to your environment variables! The vulkan SDK can be found in the readme")
+    set(VCPKG_TRIPLET "x64-linux")
+endif ()
+if (NOT VCPKG_ROOT)
+    set(VCPKG_ROOT $ENV{VCPKG_ROOT})
+endif ()
+if (VCPKG_ROOT)
+    set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+    message("${Blue}Using Toolchain file: ${Green}${CMAKE_TOOLCHAIN_FILE}${ColorReset}")
+else ()
+    message(FATAL_ERROR "VCPKG_ROOT is not set in the environment!")
 endif ()
 
-set(VULKAN_SDK $ENV{VULKAN_SDK})
+
+project(EjetSystems VERSION 0.1 LANGUAGES CXX C)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
-file(GLOB_RECURSE SRC_FILES
-        "src/*.cpp"
-        "src/*.hpp"
-        "src/*.h"
-        "src/*.c"
-)
+find_package(glfw3 CONFIG REQUIRED)
+find_package(Vulkan REQUIRED)
+
 
 set(IMGUI_SOURCES
         dependencies/ImGui/imgui.cpp
@@ -31,7 +39,6 @@ set(IMGUI_SOURCES
 )
 
 include_directories(
-        ${VULKAN_SDK}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glfw/include
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/ImGui
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Systems
@@ -40,12 +47,9 @@ include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Units
 )
 
-if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glfw/CMakeLists.txt")
-    message(FATAL_ERROR "The GLFW submodule is missing. Please ensure you have recursively cloned the repository with 'git clone --recursive' or run 'git submodule update --init --recursive'.")
-endif ()
-add_subdirectory(dependencies/glfw)
 
-add_executable(EjetSystems ${SRC_FILES}
+add_executable(EjetSystems
+        src/main.cpp
         src/Systems/E170Systems/E170Systems.cpp
         src/Systems/E170Systems/E170Systems.hpp
         src/Util/DeltaTime/DeltaTime.cpp
@@ -89,14 +93,10 @@ add_executable(EjetSystems ${SRC_FILES}
         src/Systems/Electrical/Components/CircuitBreaker.cpp
         src/Systems/Electrical/Components/CircuitBreaker.hpp
         src/Systems/Electrical/ElectricalUtil/ElectricalUtil.hpp
+        src/Systems/State/State.hpp
 )
 
 target_sources(EjetSystems PRIVATE ${IMGUI_SOURCES})
 
-target_include_directories(EjetSystems PRIVATE ${VULKAN_SDK}/include)
 
-if (WIN32)
-    target_link_libraries(EjetSystems ${VULKAN_SDK}/Lib/vulkan-1.lib glfw)
-else ()
-    target_link_libraries(EjetSystems -L${VULKAN_SDK}/lib -lvulkan glfw)
-endif ()
+target_link_libraries(EjetSystems PRIVATE Vulkan::Vulkan glfw)

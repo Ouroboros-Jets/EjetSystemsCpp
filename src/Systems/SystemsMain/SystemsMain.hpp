@@ -4,24 +4,46 @@
 
 #pragma once
 
+
 #include "E170Systems/E170Systems.hpp"
 
+#ifdef EXTERNAL_SYSTEMS
 inline void SystemMain() {
-    constexpr auto initValues = E170SystemInitializer{
-        .altitude = 0.0f,
-        .heading = 0.0f,
-        .pitch = 0.0f,
-        .bank = 0.0f,
-        .longitude = 0.0f,
-        .latitude = 0.0f,
-
-        .abort = false
+    auto HydraulicState = Variables::Hydraulic::HydraulicVars{
+            .System1 = Variables::Hydraulic::System1Vars{
+                    .ReservoirLevel = 0.0f,
+                    .EngineDrivenPumpRPM = 0.0f,
+                    .AcMotorPumpState = false,
+                    .PreManifoldPressure = 0.0f,
+                    .PostManifoldPressure = 0.0f,
+                    .LhThrustReverserPosition = 0.0f
+            }
     };
-    auto *systems = new E170Systems::E170Systems(initValues);
-    // I'm going to heap allocate all the system class and if it doesn't work or causes issues, we can go back to stack
+    auto system_state = SystemState{.electrical_vars = {.voltage = 0.0f}, .hydraulic_vars = HydraulicState};
+    auto *systems = new E170SystemsRoot(system_state);
 
     systems->Run();
 
     delete systems;
 }
+#else
+auto HydraulicState = Variables::Hydraulic::HydraulicVars{
+    .System1 = Variables::Hydraulic::System1Vars{
+        .ReservoirLevel = 0.0f,
+        .EngineDrivenPumpRPM = 0.0f,
+        .AcMotorPumpState = false,
+        .PreManifoldPressure = 0.0f,
+        .PostManifoldPressure = 0.0f,
+        .LhThrustReverserPosition = 0.0f
+}
+};
+auto system_state = SystemState{.electrical_vars = {.voltage = 0.0f}, .hydraulic_vars = HydraulicState};
+inline E170Systems::E170SystemsRoot systems_root(system_state);
 
+inline void SystemsMain() {
+    // example global update function call
+    float dt = 0.0f;
+    systems_root.Update(dt);
+}
+
+#endif
