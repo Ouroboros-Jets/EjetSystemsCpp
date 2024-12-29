@@ -1,6 +1,6 @@
 #pragma once
 
-#include "State/State.hpp"
+#include "../Shared/State.hpp"
 #include "System/System.hpp"
 
 class ElectricalSystem final : public System {

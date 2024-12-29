@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.4...3.30 FATAL_ERROR)
 
 include(cmake/colors.cmake)
+include(FetchContent)
 
 if (WIN32)
     set(VCPKG_TRIPLET "x64-windows")
@@ -24,27 +25,32 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
-find_package(glfw3 CONFIG REQUIRED)
 find_package(Vulkan REQUIRED)
 
+FetchContent_Declare(GLFW GIT_REPOSITORY https://github.com/TheCherno/glfw.git)
+FetchContent_Declare(Infinity GIT_REPOSITORY https://github.com/Tacotakedown/InfinityPackageBuilderDeps.git)
+FetchContent_MakeAvailable(GLFW Infinity)
 
-set(IMGUI_SOURCES
-        dependencies/ImGui/imgui.cpp
-        dependencies/ImGui/imgui_draw.cpp
-        dependencies/ImGui/imgui_widgets.cpp
-        dependencies/ImGui/imgui_tables.cpp
-        dependencies/ImGui/misc/cpp/imgui_stdlib.cpp
-        dependencies/ImGui/backends/imgui_impl_glfw.cpp
-        dependencies/ImGui/backends/imgui_impl_vulkan.cpp
+
+file(GLOB IMGUI_SOURCES
+        ${infinity_SOURCE_DIR}/src/imgui/
+        ${infinity_SOURCE_DIR}/src/imgui/imgui.cpp
+        ${infinity_SOURCE_DIR}/src/imgui/imgui_draw.cpp
+        ${infinity_SOURCE_DIR}/src/imgui/imgui_widgets.cpp
+        ${infinity_SOURCE_DIR}/src/imgui/imgui_tables.cpp
+        ${infinity_SOURCE_DIR}/src/imgui/misc/cpp/imgui_stdlib.cpp
+        ${infinity_SOURCE_DIR}/src/imgui/backends/imgui_impl_glfw.cpp
+        ${infinity_SOURCE_DIR}/src/imgui/backends/imgui_impl_vulkan.cpp
+        ${infinity_SOURCE_DIR}/src/imguiTextEditor/TextEditor.cpp
+        ${infinity_SOURCE_DIR}/src/imguiTextEditor/TextEditor.h
 )
 
+
+file(GLOB STB_IMAGE ${infinity_SOURCE_DIR}/include/stb_image/stb_image.h)
+file(GLOB JSON_SOURCES ${infinity_SOURCE_DIR}/include/Json/*.hpp)
+
 include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glfw/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/ImGui
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Systems
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/Renderer
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/Util
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/Units
 )
 
 
@@ -54,9 +60,6 @@ add_executable(EjetSystems
         src/Systems/E170Systems/E170Systems.hpp
         src/Util/DeltaTime/DeltaTime.cpp
         src/Util/DeltaTime/DeltaTime.hpp
-        src/Renderer/Fonts.cpp
-        src/Renderer/Fonts.h
-        src/Renderer/VulkanUtils.h
         src/Systems/SystemsMain/SystemsMain.hpp
         src/Systems/System/System.hpp
         src/Systems/Electrical/Electrical.cpp
@@ -93,10 +96,30 @@ add_executable(EjetSystems
         src/Systems/Electrical/Components/CircuitBreaker.cpp
         src/Systems/Electrical/Components/CircuitBreaker.hpp
         src/Systems/Electrical/ElectricalUtil/ElectricalUtil.hpp
-        src/Systems/State/State.hpp
+        src/Systems/Shared/State.hpp
+        src/Util/Weights/Weights.cpp
+        src/Util/Weights/Weights.hpp
+        src/Util/VirtualCockpit/VirtualCockpit.cpp
+        src/Util/VirtualCockpit/VirtualCockpit.hpp
+        src/Backend/Application/Application.cpp
+        src/Backend/Application/Application.hpp
+        src/Backend/Image/Image.cpp
+        src/Backend/Image/Image.hpp
+        src/Backend/VulkanManager/VulkanManager.hpp
+        src/Backend/Layer/Layer.hpp
+        src/Backend/UiHelpers/UiHelpers.cpp
+        src/Backend/UiHelpers/UiHelpers.hpp
+        src/Backend/ImGuiTheme/ImGuiTheme.cpp
+        src/Backend/ImGuiTheme/ImGuiTheme.hpp
+        src/Util/VirtualCockpit/Components/MultiPositionKnob/MultiPositionKnob.hpp
 )
 
-target_sources(EjetSystems PRIVATE ${IMGUI_SOURCES})
+target_sources(EjetSystems PRIVATE ${STB_IMAGE} ${IMGUI_SOURCES} ${JSON_SOURCES})
 
+target_include_directories(EjetSystems PRIVATE
+        ${infinity_SOURCE_DIR}/src/imgui
+        ${infinity_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
 
 target_link_libraries(EjetSystems PRIVATE Vulkan::Vulkan glfw)

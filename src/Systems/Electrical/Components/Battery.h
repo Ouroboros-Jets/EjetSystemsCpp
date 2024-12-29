@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <utility>
-#include "Units.hpp"
+#include "Units/Units.hpp"
 
 
 namespace Electrical::Component {

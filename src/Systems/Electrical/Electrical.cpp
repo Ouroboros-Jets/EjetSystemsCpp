@@ -4,10 +4,12 @@
 
 #include "Electrical.hpp"
 
-ElectricalSystem::ElectricalSystem(const E170SystemInitializer &state) {
+ElectricalSystem::ElectricalSystem(const ElectricalVars &state) {
 }
 
 void ElectricalSystem::Update(float dt) {
+
+
 }
 
 

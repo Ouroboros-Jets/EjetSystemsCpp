@@ -5,9 +5,10 @@
 
 #include "Electrical/Electrical.hpp"
 #include "Hydraulic/Hydraulic.hpp"
-#include "DeltaTime/DeltaTime.hpp"
+#include "Util/DeltaTime/DeltaTime.hpp"
 #include "Shared/SystemStruct.hpp"
-#include "State/State.hpp"
+#include "Systems/Shared/State.hpp"
+#include "Util/VirtualCockpit/VirtualCockpit.hpp"
 
 using namespace std::chrono_literals;
 
@@ -16,6 +17,7 @@ namespace E170Systems {
         m_DeltaTime(0.0f), m_Running(true),
         m_ElectricalSystem(std::make_unique<ElectricalSystem>(state.electrical_vars)),
         m_HydraulicSystem(std::make_unique<HydraulicSystem>(state.hydraulic_vars)) {
+        VirtualCockpit::GetInstance().Initialize(state);
         m_UpdateFunctions.emplace_back([this](const float dt) { m_ElectricalSystem->Update(dt); });
         m_UpdateFunctions.emplace_back([this](const float dt) { m_HydraulicSystem->Update(dt); });
     }

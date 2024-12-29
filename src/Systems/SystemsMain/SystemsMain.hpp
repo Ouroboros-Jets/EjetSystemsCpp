@@ -19,7 +19,7 @@ inline void SystemMain() {
                     .LhThrustReverserPosition = 0.0f
             }
     };
-    auto system_state = SystemState{.electrical_vars = {.voltage = 0.0f}, .hydraulic_vars = HydraulicState};
+    auto system_state = SystemState{.hydraulic_vars = HydraulicState, .electrical_vars = {.voltage = 0.0f}};
     auto *systems = new E170SystemsRoot(system_state);
 
     systems->Run();

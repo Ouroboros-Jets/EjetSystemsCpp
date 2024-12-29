@@ -1,9 +1,16 @@
 #pragma once
 
-#include "Units.hpp"
+#include "Units/Units.hpp"
 
 using namespace E170Systems::Units::Pressure;
 using namespace E170Systems::Units::Volume;
+using namespace E170Systems::Units::ElectricCurrent;
+using namespace E170Systems::Units::ElectricStorage;
+using namespace E170Systems::Units::Power;
+using namespace E170Systems::Units::Energy;
+using namespace E170Systems::Units::Voltage;
+using namespace E170Systems::Units::Resistance;
+using namespace E170Systems::Units::Capacitance;
 
 
 namespace E170Systems::Variables {
@@ -26,5 +33,11 @@ namespace E170Systems::Variables {
 
     namespace Electrical {
 
+    }
+
+    namespace Electrical {
+        struct ElectricalSystemVars {
+
+        };
     }
 }
