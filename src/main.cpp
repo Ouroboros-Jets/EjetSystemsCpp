@@ -19,6 +19,8 @@ namespace Ouroboros {
             if (VirtualCockpit::GetInstance().IsInitialized()) {
                 VirtualCockpit::GetInstance().RenderImGui();
             }
+            auto image = ImageStorage::Instance().GetImage("overhead");
+            ImGui::SetNextWindowPos(ImVec2(static_cast<float>(image->GetWidth() * 1.3) + 100.0f, 0));
             Weights::GetInstance().RenderImGui();
         }
 

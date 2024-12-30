@@ -21,7 +21,7 @@ namespace Ouroboros {
         colors[ImGuiCol_ButtonActive] = ImColor(56, 56, 56, 150);
 
         // Frame BG
-        colors[ImGuiCol_FrameBg] = ImColor(0, 0, 0);
+        colors[ImGuiCol_FrameBg] = ImColor(35, 14, 59);
         colors[ImGuiCol_FrameBgHovered] = ImGui::ColorConvertU32ToFloat4(Colors::Theme::property_field);
         colors[ImGuiCol_FrameBgActive] = ImColor(0, 0, 0);
 
@@ -67,10 +67,10 @@ namespace Ouroboros {
         colors[ImGuiCol_SeparatorHovered] = ImColor(39, 185, 242, 150);
 
         // Window Background
-        colors[ImGuiCol_WindowBg] = ImColor(0, 0, 0);
+        colors[ImGuiCol_WindowBg] = ImColor(18, 7, 30, 255);
         colors[ImGuiCol_ChildBg] = ImColor(0, 0, 0);
         colors[ImGuiCol_PopupBg] = ImColor(0, 0, 0);
-        colors[ImGuiCol_Border] = ImColor(0, 0, 0);
+        colors[ImGuiCol_Border] = ImColor(3, 75, 251);
 
         // Tables
         colors[ImGuiCol_TableHeaderBg] = ImGui::ColorConvertU32ToFloat4(Colors::Theme::group_header);
@@ -82,7 +82,8 @@ namespace Ouroboros {
         //========================================================
         /// Style
         style.FrameRounding = 2.5f;
-        style.FrameBorderSize = 1.0f;
+        style.FrameBorderSize = 0.0f;
+        style.WindowBorderSize = 2.0f;
         style.IndentSpacing = 11.0f;
     }
 } // namespace Infinity

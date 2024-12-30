@@ -112,6 +112,9 @@ add_executable(EjetSystems
         src/Backend/ImGuiTheme/ImGuiTheme.cpp
         src/Backend/ImGuiTheme/ImGuiTheme.hpp
         src/Util/VirtualCockpit/Components/MultiPositionKnob/MultiPositionKnob.hpp
+        src/Util/VirtualCockpit/Components/CircuitBreakerUI/CircuitBreakerUI.hpp
+        src/Util/VirtualCockpit/Components/MultiPositionSwitch/MultiPositionSwitch.hpp
+        src/Util/VirtualCockpit/Components/IlluminatedButton/IlluminatedButton.hpp
 )
 
 target_sources(EjetSystems PRIVATE ${STB_IMAGE} ${IMGUI_SOURCES} ${JSON_SOURCES})

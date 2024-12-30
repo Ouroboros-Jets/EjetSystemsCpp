@@ -1,11 +1,19 @@
 
 #include "VirtualCockpit.hpp"
 
+#include "Backend/Application/Application.hpp"
+#include "Backend/Application/Application.hpp"
 #include "Backend/Image/Image.hpp"
+#include "Components/CircuitBreakerUI/CircuitBreakerUI.hpp"
+#include "Components/IlluminatedButton/IlluminatedButton.hpp"
 #include "Components/MultiPositionKnob/MultiPositionKnob.hpp"
+#include "Components/MultiPositionSwitch/MultiPositionSwitch.hpp"
 
 void VirtualCockpit::RenderImGui() {
-    ImGui::Begin("Virtual Cockpit");
+    ImGui::SetNextWindowPos(ImVec2(0, 0));
+    auto image = Ouroboros::ImageStorage::Instance().GetImage("overhead");
+    ImGui::SetNextWindowSize({(image->GetWidth() + 50.0f) * 1.3f, ImGui::GetWindowHeight()});
+    ImGui::Begin("Virtual Cockpit", NULL, ImGuiWindowFlags_NoMove);
     if (ImGui::Button("FlightControls")) {
         m_Page = 0;
     }
@@ -104,28 +112,85 @@ void VirtualCockpit::RenderFlightControlsSliders() {
         m_SystemState->flight_control_state.demanded_yaw = 0.0f;
 }
 
-static int knob_position = 0;
-static int previous_knob_position = 0;
-static int knob_position2 = 0;
-static int previous_knob_position2 = 0;
 
 void VirtualCockpit::RenderOverheadPanel() {
     ImGui::Text("Overhead");
+
+    auto draw_list = ImGui::GetWindowDrawList();
     auto image = Ouroboros::ImageStorage::Instance().GetImage("overhead");
     Ouroboros::Image::RenderImage(image, {ImGui::GetWindowPos().x + 50.0f, ImGui::GetWindowPos().y + 70.0f}, 1.3f);
-    ImGui::SetWindowSize({(image->GetWidth() + 50.0f) * 1.3f, (image->GetHeight() + 70.0f) * 1.3f});
-    ImGui::SetCursorPos({120.0f, 220.0f});
-    MultiPositionKnob("IDG 1", &knob_position, 3, {"AUTO", "OFF", "DISC"});
-    if (knob_position != previous_knob_position) {
-        printf("knob_position = %d\n", knob_position);
-    }
-    previous_knob_position = knob_position;
-    ImGui::SetCursorPos({220.0f, 220.0f});
-    MultiPositionKnob("IDG 2", &knob_position2, 3, {"AUTO", "OFF", "DISC"});
-    if (knob_position2 != previous_knob_position2) {
-        printf("knob_position = %d\n", knob_position);
-    }
-    previous_knob_position2 = knob_position2;
+
+    auto window_pos = ImGui::GetWindowPos();
+    draw_list->AddRectFilled({window_pos.x + 80.0f, window_pos.y + 190.0f},
+                             {window_pos.x + 307.0f, window_pos.y + 624.0f},
+                             ImColor(124, 129, 132, 255));
+    //ImColor(255, 0, 0, 255));
+
+
+    ImGui::SetCursorPos({120.0f, 200.0f});
+    MultiPositionKnob("IDG 1", &m_SystemState->flight_control_state.overhead_panel.electrical_panel.idg1_state, 3,
+                      {"AUTO", "OFF", "DISC"});
+    ImGui::SetCursorPos({220.0f, 200.0f});
+    MultiPositionKnob("IDG 2", &m_SystemState->flight_control_state.overhead_panel.electrical_panel.idg2_state, 3,
+                      {"AUTO", "OFF", "DISC"});
+    ImGui::SetCursorPos({170.0f, 320.0f});
+    MultiPositionKnob("AC BUS TIES",
+                      &m_SystemState->flight_control_state.overhead_panel.electrical_panel.ac_bus_ties_state, 3,
+                      {"AUTO", "1 OPEN", "2 OPEN"});
+
+
+    ImGui::SetCursorPos({260.0f, 366.0f});
+    IlluminatedButton("APU GEN", &m_SystemState->flight_control_state.overhead_panel.electrical_panel.apu_gen_state);
+
+    //TODO: GPU button (needs a custom button to mimic real functionality)
+    ImGui::SetCursorPos({90.0f, 366.0f});
+    IlluminatedButton("GPU", &m_SystemState->flight_control_state.overhead_panel.electrical_panel.gpu_button_state);
+
+
+    ImGui::SetCursorPos({100.0f, 450.0f});
+    MultiPositionSwitch("TRU1", &m_SystemState->flight_control_state.overhead_panel.electrical_panel.tru1_state, 2,
+                        20.0f, 50.0f, {{"OFF", ImVec4(0.8f, 0.2f, 0.2f, 1.0f)},
+                                       {"AUTO", ImVec4(0.2f, 0.6f, 0.2f, 1.0f)}
+                        });
+    ImGui::SetCursorPos({180.0f, 450.0f});
+    MultiPositionSwitch("TRU ESS", &m_SystemState->flight_control_state.overhead_panel.electrical_panel.tru_ess_state,
+                        2, 20.0f, 50.0f, {{"OFF", ImVec4(0.8f, 0.2f, 0.2f, 1.0f)},
+                                          {"AUTO", ImVec4(0.2f, 0.6f, 0.2f, 1.0f)}
+                        });
+    ImGui::SetCursorPos({260.0f, 450.0f});
+    MultiPositionSwitch("TRU2", &m_SystemState->flight_control_state.overhead_panel.electrical_panel.tru2_state, 2,
+                        20.0f, 50.0f, {{"OFF", ImVec4(0.8f, 0.2f, 0.2f, 1.0f)},
+                                       {"AUTO", ImVec4(0.2f, 0.6f, 0.2f, 1.0f)}
+                        });
+
+    ImGui::SetCursorPos({160.0f, 560.0f});
+    MultiPositionSwitch(
+            "DC TIES", &m_SystemState->flight_control_state.overhead_panel.electrical_panel.dc_bus_ties_state, 2,
+            20.0f, 50.0f, {{"OFF", ImVec4(0.8f, 0.2f, 0.2f, 1.0f)},
+                           {"AUTO", ImVec4(0.2f, 0.6f, 0.2f, 1.0f)}
+            });
+
+    ImGui::SetCursorPos({90.0f, 510.0f});
+    MultiPositionKnob("BATT 1", &m_SystemState->flight_control_state.overhead_panel.electrical_panel.batt_1_state, 2,
+                      {"OFF", "ON"});
+    ImGui::SetCursorPos({250.0f, 510.0f});
+    MultiPositionKnob("BATT 2", &m_SystemState->flight_control_state.overhead_panel.electrical_panel.batt_2_state, 2,
+                      {"OFF", "AUTO"});
+
+
+    // ____________________________________Cockpit Lights_______________________________
+    draw_list->AddRectFilled({window_pos.x + 80.0f, window_pos.y + 630.0f},
+                             {window_pos.x + 307.0f, window_pos.y + 804.0f},
+                             ImColor(124, 129, 132, 255));
+    ImGui::SetCursorPos({140.0f, 650.0f});
+    ImGui::Text("COCKPIT LIGHTS");
+    ImGui::SetCursorPos({200.0f, 750.0f});
+    MultiPositionSwitch(
+            "DOME", &m_SystemState->flight_control_state.overhead_panel.cockpit_lights.dome_light, 2,
+            20.0f, 50.0f, {{"OFF", ImVec4(0.8f, 0.2f, 0.2f, 1.0f)},
+                           {"ON", ImVec4(0.2f, 0.6f, 0.2f, 1.0f)}
+            });
+
 }
 
 void VirtualCockpit::RenderMainPanel() {
@@ -135,15 +200,18 @@ void VirtualCockpit::RenderMainPanel() {
 void VirtualCockpit::RenderPedestal() {
     ImGui::Text("Pedestal");
     auto image = Ouroboros::ImageStorage::Instance().GetImage("pedestal");
-    Ouroboros::Image::RenderImage(image, {ImGui::GetWindowPos().x + 50.0f, ImGui::GetWindowPos().y + 70.0f}, 1.0f);
+    Ouroboros::Image::RenderImage(image, {ImGui::GetWindowPos().x + 50.0f, ImGui::GetWindowPos().y + 70.0f}, 0.8f);
 }
 
 void VirtualCockpit::RenderFloor() {
     ImGui::Text("Floor");
 }
 
+static bool cb1 = true;
+
 void VirtualCockpit::RenderCircuitBreakerPanels() {
     ImGui::Text("CircuitBreakerPanels");
+    CircuitBreakerUI("breaker1", &cb1);
 }
 
 void VirtualCockpit::RenderOxygenMasks() {

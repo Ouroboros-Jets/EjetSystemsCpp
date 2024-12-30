@@ -9,7 +9,8 @@
 
 #define PI 3.1415926535897932384 // from memory :)
 
-bool MultiPositionKnob(const char *label, int *position, int max_positions, const std::vector<std::string> &labels) {
+static bool MultiPositionKnob(const char *label, int *position, int max_positions,
+                              const std::vector<std::string> &labels) {
     assert(max_positions > 1);
     assert(labels.size() == max_positions);
 
@@ -17,7 +18,7 @@ bool MultiPositionKnob(const char *label, int *position, int max_positions, cons
     ImGui::Text("%s", label);
 
     ImVec2 pos = ImGui::GetCursorScreenPos();
-    ImVec2 size = ImVec2(50, 50);
+    ImVec2 size = ImVec2(50, 80);
 
     ImDrawList *draw_list = ImGui::GetWindowDrawList();
     ImVec2 center = ImVec2(pos.x + size.x / 2, pos.y + size.y / 2);
@@ -33,8 +34,8 @@ bool MultiPositionKnob(const char *label, int *position, int max_positions, cons
     for (int i = 0; i < max_positions; ++i) {
         float label_angle = i * (2.0f * PI / max_positions) - PI / 2.0f;
         ImVec2 label_pos = ImVec2(
-                center.x + radius * 1.15f * cosf(label_angle),
-                center.y + radius * 1.15f * sinf(label_angle)
+                center.x + radius * 1.45f * cosf(label_angle),
+                center.y + radius * 1.45f * sinf(label_angle)
                 );
 
         ImVec2 text_size = ImGui::CalcTextSize(labels[i].c_str());

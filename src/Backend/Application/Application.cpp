@@ -156,7 +156,6 @@ namespace Ouroboros {
         style.ChildRounding = 6.0f;
         style.PopupRounding = 6.0f;
         style.FrameRounding = 6.0f;
-        style.Colors[ImGuiCol_WindowBg].w = 0.0f;
         style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
 
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
@@ -327,16 +326,17 @@ namespace Ouroboros {
                 ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
                 ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
                 window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
-                        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground;
+                        ImGuiWindowFlags_NoMove;
                 window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
 
                 ImGui::Begin("DockSpaceWindow", nullptr, window_flags);
-
+                ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.0f);
+                ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(2.0f, 2.0f));
                 for (const auto &layer: m_LayerStack)
                     layer->OnUIRender();
 
-
+                ImGui::PopStyleVar(2);
                 ImGui::PopStyleVar(3);
 
                 ImGui::End();
