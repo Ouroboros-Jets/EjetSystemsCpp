@@ -8,6 +8,8 @@
 #include "Components/IlluminatedButton/IlluminatedButton.hpp"
 #include "Components/MultiPositionKnob/MultiPositionKnob.hpp"
 #include "Components/MultiPositionSwitch/MultiPositionSwitch.hpp"
+#include "Components/Throttle/Throttle.hpp"
+#include "Components/Slider/Slider.hpp"
 
 void VirtualCockpit::RenderImGui() {
     ImGui::SetNextWindowPos(ImVec2(0, 0));
@@ -197,10 +199,76 @@ void VirtualCockpit::RenderMainPanel() {
     ImGui::Text("Main panel");
 }
 
+static bool split_throttles = false;
+
 void VirtualCockpit::RenderPedestal() {
     ImGui::Text("Pedestal");
     auto image = Ouroboros::ImageStorage::Instance().GetImage("pedestal");
     Ouroboros::Image::RenderImage(image, {ImGui::GetWindowPos().x + 50.0f, ImGui::GetWindowPos().y + 70.0f}, 0.8f);
+
+    ImGui::SetCursorPos({220.0f, 150.0f});
+    MultiPositionKnob("ENG1", &m_SystemState->flight_control_state.pedestal.power_plant_panel.eng_1_start_stop_switch,
+                      3, {"STOP", "RUN", "START"}, false);
+
+    ImGui::SetCursorPos({350.0f, 150.0f});
+    MultiPositionKnob("ENG2", &m_SystemState->flight_control_state.pedestal.power_plant_panel.eng_2_start_stop_switch,
+                      3, {"STOP", "RUN", "START"}, false);
+
+    ImGui::SetCursorPos({220.0f, 240.0f});
+    MultiPositionKnob("IGN1", &m_SystemState->flight_control_state.pedestal.power_plant_panel.eng_1_ignition_switch,
+                      3, {"OFF", "AUTO", "OVRD"}, false);
+
+    ImGui::SetCursorPos({350.0f, 240.0f});
+    MultiPositionKnob("IGN2", &m_SystemState->flight_control_state.pedestal.power_plant_panel.eng_2_ignition_switch,
+                      3, {"OFF", "AUTO", "OVRD"}, false);
+
+    ImGui::SetCursorPos({50.0f, 560.0f});
+    MultiPositionSwitch("Parking Brake", &m_SystemState->flight_control_state.pedestal.parking_brake_switch, 2, 40.0f,
+                        150.0f, {{"OFF", ImVec4(0.2f, 0.8f, 0.2f, 1.0f)}, {"ON", ImVec4(0.8f, 0.2f, 0.2f, 1.0f)}});
+
+    ImGui::SetCursorPos({480.0f, 630.0f});
+    MultiPositionSwitch("SLAT/FLAP", &m_SystemState->flight_control_state.pedestal.slat_flap_switch, 7, 30.0f, 150.0f,
+                        {
+                                {"0", ImVec4(1.0f, 1.0f, 1.0f, 1.0f)},
+                                {"1", ImVec4(1.0f, 1.0f, 1.0f, 1.0f)},
+                                {"2", ImVec4(1.0f, 1.0f, 1.0f, 1.0f)},
+                                {"3", ImVec4(1.0f, 1.0f, 1.0f, 1.0f)},
+                                {"4", ImVec4(1.0f, 1.0f, 1.0f, 1.0f)},
+                                {"5", ImVec4(1.0f, 1.0f, 1.0f, 1.0f)},
+                                {"FULL", ImVec4(1.0f, 1.0f, 1.0f, 1.0f)},
+                        }, true);
+
+
+    ImGui::SetCursorPos({400.0f, 350.0f});
+    ImGui::Checkbox("Split Throttle", &split_throttles);
+    ImGui::SetCursorPos({260.0f, 350.0f});
+    DualThrottle("Throttles", &m_SystemState->flight_control_state.pedestal.eng_1_throttle_lever,
+                 &m_SystemState->flight_control_state.pedestal.eng_1_is_reversed,
+                 &m_SystemState->flight_control_state.pedestal.eng_2_throttle_lever,
+                 &m_SystemState->flight_control_state.pedestal.eng_2_is_reversed,
+                 split_throttles, 40.0f, 200.0f, 20);
+    // TODO: TOGA, Min Rev
+
+
+    ImGui::SetCursorPos({200.0f, 380.0f});
+    ImGui::Text("SPBRK");
+    ImGui::SetCursorPos({220.0f, 420.0f});
+    Slider("Speed Brake", &m_SystemState->flight_control_state.pedestal.speed_brake_lever, 20.0f, 100.0f, true);
+
+
+    ImGui::SetCursorPos({70.0f, 870.0f});
+    MultiPositionSwitch("Elevator Disconnect", &m_SystemState->flight_control_state.pedestal.elevator_disconnect_switch,
+                        2, 40.0f, 80.0f, {
+                                {"CONNECTED", ImColor(0.2f, 0.8f, 0.2f, 1.0f)},
+                                {"DISCONNECTED", ImColor(0.8f, 0.2f, 0.2f, 1.0f)},
+                        });
+
+    ImGui::SetCursorPos({470.0f, 870.0f});
+    MultiPositionSwitch("Aileron Disconnect", &m_SystemState->flight_control_state.pedestal.aileron_disconnect_switch,
+                        2, 40.0f, 80.0f, {
+                                {"CONNECTED", ImColor(0.2f, 0.8f, 0.2f, 1.0f)},
+                                {"DISCONNECTED", ImColor(0.8f, 0.2f, 0.2f, 1.0f)},
+                        });
 }
 
 void VirtualCockpit::RenderFloor() {

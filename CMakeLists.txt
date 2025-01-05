@@ -115,6 +115,8 @@ add_executable(EjetSystems
         src/Util/VirtualCockpit/Components/CircuitBreakerUI/CircuitBreakerUI.hpp
         src/Util/VirtualCockpit/Components/MultiPositionSwitch/MultiPositionSwitch.hpp
         src/Util/VirtualCockpit/Components/IlluminatedButton/IlluminatedButton.hpp
+        src/Util/VirtualCockpit/Components/Throttle/Throttle.hpp
+        src/Util/VirtualCockpit/Components/Slider/Slider.hpp
 )
 
 target_sources(EjetSystems PRIVATE ${STB_IMAGE} ${IMGUI_SOURCES} ${JSON_SOURCES})

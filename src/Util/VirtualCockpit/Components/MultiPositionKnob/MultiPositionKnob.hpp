@@ -10,12 +10,15 @@
 #define PI 3.1415926535897932384 // from memory :)
 
 static bool MultiPositionKnob(const char *label, int *position, int max_positions,
-                              const std::vector<std::string> &labels) {
+                              const std::vector<std::string> &labels, bool show_label = true) {
     assert(max_positions > 1);
     assert(labels.size() == max_positions);
 
     ImGui::BeginGroup();
-    ImGui::Text("%s", label);
+    if (show_label) {
+        ImGui::Text("%s", label);
+    }
+
 
     ImVec2 pos = ImGui::GetCursorScreenPos();
     ImVec2 size = ImVec2(50, 80);

@@ -47,7 +47,8 @@ struct FlightControlState {
         } cockpit_lights;
 
         struct FirePanel {
-            int eng_1_fire_extinguisher{0}; // 0 off, 1 pulled, 2 shot
+            int eng_1_fire_extinguisher{0};
+            // 0 off, 1 pulled, 2 shot TODO: idk how i want to simulate extinguisher B, prob just gonna be inop
             int eng_2_fire_extinguisher{0};
             int fwd_cargo_fire_extinguisher{0}; // 0 off, 1 pressed
             int aft_cargo_fire_extinguisher{0};
@@ -137,6 +138,46 @@ struct FlightControlState {
             int mask_deployed_switch{0};
         } pax_oxygen_panel;
     } overhead_panel;
+
+
+    struct Pedestal {
+
+        struct FlightControlPanel {
+            int elevator_switch{0};
+            int rudder_switch{0};
+            int airbrake_switch{0};
+        } flight_control_panel;
+
+        struct StickShakerPanel {
+            int shaker_1_switch{0};
+            int shaker_2_switch{0};
+        } stick_shaker_panel;
+
+        struct PowerPlantPanel {
+            int eng_1_start_stop_switch{0}; // 0 stop, 1 run, 2 start
+            int eng_2_start_stop_switch{0};
+            int eng_1_ignition_switch{0};
+            int eng_2_ignition_switch{0};
+        } power_plant_panel;
+
+        float speed_brake_lever{0.0f}; // ima make it a slider in the gui
+
+        float eng_1_throttle_lever{0.0f};
+        float eng_2_throttle_lever{0.0f};
+        int eng_1_is_reversed{0};
+        int eng_2_is_reversed{0};
+
+        int parking_brake_switch{0};
+
+        int slat_flap_switch{0};
+
+        int elevator_disconnect_switch{0};
+        int aileron_disconnect_switch{0};
+
+
+        //TODO: trim, cockpit door ig,
+
+    } pedestal;
 };
 
 
