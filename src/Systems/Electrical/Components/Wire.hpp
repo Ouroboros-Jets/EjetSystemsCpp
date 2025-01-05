@@ -28,5 +28,4 @@ namespace Electrical::Component {
         E170Systems::Units::Voltage::Volt m_Voltage;
         E170Systems::Units::ElectricCurrent::Ampere m_Current;
     };
-}
-
+} // namespace Electrical::Component

@@ -10,7 +10,5 @@ namespace Hydraulic::Component::HydraulicLine {
     };
 
 
-    class HydraulicLine {
-    };
-}
-
+    class HydraulicLine {};
+} // namespace Hydraulic::Component::HydraulicLine

@@ -23,23 +23,18 @@ namespace Ouroboros::UI {
 
     ImRect RectOffset(const ImRect &rect, ImVec2 xy);
 
-    void DrawButtonImage(const std::shared_ptr<Image> &imageNormal, const std::shared_ptr<Image> &imageHovered,
-                         const std::shared_ptr<Image> &imagePressed, ImU32 tintNormal, ImU32 tintHovered,
-                         ImU32 tintPressed, ImVec2 rectMin, ImVec2 rectMax);
+    void DrawButtonImage(const std::shared_ptr<Image> &imageNormal, const std::shared_ptr<Image> &imageHovered, const std::shared_ptr<Image> &imagePressed, ImU32 tintNormal,
+                         ImU32 tintHovered, ImU32 tintPressed, ImVec2 rectMin, ImVec2 rectMax);
 
-    void DrawButtonImage(const std::shared_ptr<Image> &imageNormal, const std::shared_ptr<Image> &imageHovered,
-                         const std::shared_ptr<Image> &imagePressed, ImU32 tintNormal, ImU32 tintHovered,
-                         ImU32 tintPressed, ImRect rectangle);
+    void DrawButtonImage(const std::shared_ptr<Image> &imageNormal, const std::shared_ptr<Image> &imageHovered, const std::shared_ptr<Image> &imagePressed, ImU32 tintNormal,
+                         ImU32 tintHovered, ImU32 tintPressed, ImRect rectangle);
 
-    void DrawButtonImage(const std::shared_ptr<Image> &image, ImU32 tintNormal, ImU32 tintHovered, ImU32 tintPressed,
-                         ImVec2 rectMin, ImVec2 rectMax);
+    void DrawButtonImage(const std::shared_ptr<Image> &image, ImU32 tintNormal, ImU32 tintHovered, ImU32 tintPressed, ImVec2 rectMin, ImVec2 rectMax);
 
-    void DrawButtonImage(const std::shared_ptr<Image> &image, ImU32 tintNormal, ImU32 tintHovered, ImU32 tintPressed,
-                         ImRect rectangle);
+    void DrawButtonImage(const std::shared_ptr<Image> &image, ImU32 tintNormal, ImU32 tintHovered, ImU32 tintPressed, ImRect rectangle);
 
-    void DrawButtonImage(const std::shared_ptr<Image> &imageNormal, const std::shared_ptr<Image> &imageHovered,
-                         const std::shared_ptr<Image> &imagePressed, ImU32 tintNormal, ImU32 tintHovered,
-                         ImU32 tintPressed);
+    void DrawButtonImage(const std::shared_ptr<Image> &imageNormal, const std::shared_ptr<Image> &imageHovered, const std::shared_ptr<Image> &imagePressed, ImU32 tintNormal,
+                         ImU32 tintHovered, ImU32 tintPressed);
 
     void DrawButtonImage(const std::shared_ptr<Image> &image, ImU32 tintNormal, ImU32 tintHovered, ImU32 tintPressed);
 
@@ -114,11 +109,8 @@ namespace Ouroboros::UI {
         ScopedColorStack operator=(const ScopedColorStack &) = delete;
 
         template<typename ColorType, typename... OtherColors>
-        ScopedColorStack(ImGuiCol firstColorID, ColorType firstColor, OtherColors &&... otherColorPairs) :
-            m_Count((sizeof...(otherColorPairs) / 2) + 1) {
-            static_assert((sizeof...(otherColorPairs) & 1u) == 0,
-                          "ScopedColorStack constructor expects a list of pairs of Color IDs and Colors as its arguments")
-                    ;
+        ScopedColorStack(ImGuiCol firstColorID, ColorType firstColor, OtherColors &&...otherColorPairs) : m_Count((sizeof...(otherColorPairs) / 2) + 1) {
+            static_assert((sizeof...(otherColorPairs) & 1u) == 0, "ScopedColorStack constructor expects a list of pairs of Color IDs and Colors as its arguments");
 
             PushColor(firstColorID, firstColor, std::forward<OtherColors>(otherColorPairs)...);
         }
@@ -129,7 +121,7 @@ namespace Ouroboros::UI {
         int m_Count;
 
         template<typename ColorType, typename... OtherColors>
-        void PushColor(ImGuiCol ColorID, ColorType Color, OtherColors &&... otherColorPairs) {
+        void PushColor(ImGuiCol ColorID, ColorType Color, OtherColors &&...otherColorPairs) {
             if constexpr (sizeof...(otherColorPairs) == 0) {
                 ImGui::PushStyleColor(ColorID, Color);
             } else {
@@ -146,11 +138,8 @@ namespace Ouroboros::UI {
         ScopedStyleStack operator=(const ScopedStyleStack &) = delete;
 
         template<typename ValueType, typename... OtherStylePairs>
-        ScopedStyleStack(ImGuiStyleVar firstStyleVar, ValueType firstValue, OtherStylePairs &&... otherStylePairs) :
-            m_Count((sizeof...(otherStylePairs) / 2) + 1) {
-            static_assert((sizeof...(otherStylePairs) & 1u) == 0,
-                          "ScopedStyleStack constructor expects a list of pairs of Color IDs and Colors as its arguments")
-                    ;
+        ScopedStyleStack(ImGuiStyleVar firstStyleVar, ValueType firstValue, OtherStylePairs &&...otherStylePairs) : m_Count((sizeof...(otherStylePairs) / 2) + 1) {
+            static_assert((sizeof...(otherStylePairs) & 1u) == 0, "ScopedStyleStack constructor expects a list of pairs of Color IDs and Colors as its arguments");
 
             PushStyle(firstStyleVar, firstValue, std::forward<OtherStylePairs>(otherStylePairs)...);
         }
@@ -161,7 +150,7 @@ namespace Ouroboros::UI {
         int m_Count;
 
         template<typename ValueType, typename... OtherStylePairs>
-        void PushStyle(ImGuiStyleVar styleVar, ValueType value, OtherStylePairs &&... otherStylePairs) {
+        void PushStyle(ImGuiStyleVar styleVar, ValueType value, OtherStylePairs &&...otherStylePairs) {
             if constexpr (sizeof...(otherStylePairs) == 0) {
                 ImGui::PushStyleVar(styleVar, value);
             } else {
@@ -177,13 +166,10 @@ namespace Ouroboros::UI {
 
         ScopedItemFlags operator=(const ScopedItemFlags &) = delete;
 
-        explicit ScopedItemFlags(const ImGuiItemFlags flags, const bool enable = true) {
-            ImGui::PushItemFlag(flags, enable);
-        }
+        explicit ScopedItemFlags(const ImGuiItemFlags flags, const bool enable = true) { ImGui::PushItemFlag(flags, enable); }
 
         ~ScopedItemFlags() { ImGui::PopItemFlag(); }
     };
 
-    void DrawBorder(ImRect rect, float thickness = 1.0f, float rounding = 0.0f, float offsetX = 0.0f,
-                    float offsetY = 0.0f);
-} // namespace Infinity::UiHelpers
+    void DrawBorder(ImRect rect, float thickness = 1.0f, float rounding = 0.0f, float offsetX = 0.0f, float offsetY = 0.0f);
+} // namespace Ouroboros::UI

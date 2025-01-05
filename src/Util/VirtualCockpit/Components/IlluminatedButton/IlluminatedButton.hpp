@@ -3,8 +3,8 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 
-static bool IlluminatedButton(const char *label, int *state, float width = 40.0f, float height = 40.0f,
-                              ImU32 on_color = IM_COL32(0, 0, 0, 255), ImU32 off_color = IM_COL32(0, 0, 0, 255)) {
+static bool IlluminatedButton(const char *label, int *state, float width = 40.0f, float height = 40.0f, ImU32 on_color = IM_COL32(0, 0, 0, 255),
+                              ImU32 off_color = IM_COL32(0, 0, 0, 255)) {
     ImGuiWindow *window = ImGui::GetCurrentWindow();
     if (window->SkipItems)
         return false;
@@ -34,27 +34,14 @@ static bool IlluminatedButton(const char *label, int *state, float width = 40.0f
 
     draw_list->AddText(label_pos, IM_COL32(255, 255, 255, 255), label);
 
-    draw_list->AddRectFilled(
-            bb.Min, bb.Max,
-            (*state == 1) ? on_color : off_color,
-            height * 0.1f
-            );
+    draw_list->AddRectFilled(bb.Min, bb.Max, (*state == 1) ? on_color : off_color, height * 0.1f);
 
     const float indicator_width = width * 0.3f;
     const float indicator_height = height * 0.1f;
-    const ImVec2 indicator_min = ImVec2(
-            bb.Min.x + (width - indicator_width) * 0.5f,
-            bb.Min.y + (height - indicator_height) * 0.5f
-            );
-    const ImVec2 indicator_max = ImVec2(
-            indicator_min.x + indicator_width,
-            indicator_min.y + indicator_height
-            );
+    const ImVec2 indicator_min = ImVec2(bb.Min.x + (width - indicator_width) * 0.5f, bb.Min.y + (height - indicator_height) * 0.5f);
+    const ImVec2 indicator_max = ImVec2(indicator_min.x + indicator_width, indicator_min.y + indicator_height);
 
-    draw_list->AddRectFilled(
-            indicator_min, indicator_max,
-            (*state == 1) ? IM_COL32(255, 255, 255, 255) : IM_COL32(0, 0, 0, 255)
-            );
+    draw_list->AddRectFilled(indicator_min, indicator_max, (*state == 1) ? IM_COL32(255, 255, 255, 255) : IM_COL32(0, 0, 0, 255));
 
     draw_list->AddRect(bb.Min, bb.Max, IM_COL32(0, 0, 0, 255), height * 0.1f, 0, 2.0f);
 

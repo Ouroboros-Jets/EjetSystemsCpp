@@ -4,12 +4,6 @@
 
 #include "Electrical.hpp"
 
-ElectricalSystem::ElectricalSystem(const ElectricalVars &state) {
-}
+ElectricalSystem::ElectricalSystem(const ElectricalVars &state) {}
 
-void ElectricalSystem::Update(float dt) {
-
-
-}
-
-
+void ElectricalSystem::Update(float dt) {}

@@ -1,8 +1,8 @@
 // Purpose: Provide a imgui interface for all flight deck controls (i want to fly airplane in imgui)
 #pragma once
 
-#include "imgui.h"
 #include "Shared/State.hpp"
+#include "imgui.h"
 
 class VirtualCockpit {
 public:
@@ -21,9 +21,7 @@ public:
     void RenderImGui();
 
 private:
-    VirtualCockpit():
-        m_SystemState(nullptr), m_Page(0) {
-    }
+    VirtualCockpit() : m_SystemState(nullptr), m_Page(0) {}
 
     void RenderFlightControlsSliders();
     void RenderOverheadPanel();

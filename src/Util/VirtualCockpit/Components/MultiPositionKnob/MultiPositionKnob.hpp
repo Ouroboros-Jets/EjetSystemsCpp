@@ -4,13 +4,12 @@
 #include "imgui.h"
 
 #include <cmath>
-#include <vector>
 #include <string>
+#include <vector>
 
 #define PI 3.1415926535897932384 // from memory :)
 
-static bool MultiPositionKnob(const char *label, int *position, int max_positions,
-                              const std::vector<std::string> &labels, bool show_label = true) {
+static bool MultiPositionKnob(const char *label, int *position, int max_positions, const std::vector<std::string> &labels, bool show_label = true) {
     assert(max_positions > 1);
     assert(labels.size() == max_positions);
 
@@ -30,22 +29,15 @@ static bool MultiPositionKnob(const char *label, int *position, int max_position
     draw_list->AddCircleFilled(center, radius, IM_COL32(50, 50, 50, 255));
 
     float angle = (*position) * (2.0f * PI / max_positions) - PI / 2.0f;
-    ImVec2 pointer = ImVec2(center.x + radius * 0.6f * cosf(angle),
-                            center.y + radius * 0.6f * sinf(angle));
+    ImVec2 pointer = ImVec2(center.x + radius * 0.6f * cosf(angle), center.y + radius * 0.6f * sinf(angle));
     draw_list->AddLine(center, pointer, IM_COL32(255, 255, 255, 255), 2.0f);
 
     for (int i = 0; i < max_positions; ++i) {
         float label_angle = i * (2.0f * PI / max_positions) - PI / 2.0f;
-        ImVec2 label_pos = ImVec2(
-                center.x + radius * 1.45f * cosf(label_angle),
-                center.y + radius * 1.45f * sinf(label_angle)
-                );
+        ImVec2 label_pos = ImVec2(center.x + radius * 1.45f * cosf(label_angle), center.y + radius * 1.45f * sinf(label_angle));
 
         ImVec2 text_size = ImGui::CalcTextSize(labels[i].c_str());
-        draw_list->AddText(
-                ImVec2(label_pos.x - text_size.x / 2, label_pos.y - text_size.y / 2),
-                IM_COL32(255, 255, 255, 255), labels[i].c_str()
-                );
+        draw_list->AddText(ImVec2(label_pos.x - text_size.x / 2, label_pos.y - text_size.y / 2), IM_COL32(255, 255, 255, 255), labels[i].c_str());
     }
 
     ImGui::InvisibleButton(label, size);

@@ -1,8 +1,8 @@
 
 #include "Image.hpp"
+#include "Backend/Application/Application.hpp"
 #include "backends/imgui_impl_vulkan.h"
 #include "imgui.h"
-#include "Backend/Application/Application.hpp"
 
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -53,8 +53,7 @@ namespace Ouroboros {
             return (VkFormat) 0;
         }
     } // namespace Utils
-    Image::Image(const uint32_t width, const uint32_t height, const ImageFormat format, const void *data) :
-        m_Width(width), m_Height(height), m_Format(format) {
+    Image::Image(const uint32_t width, const uint32_t height, const ImageFormat format, const void *data) : m_Width(width), m_Height(height), m_Format(format) {
         AllocateMemory(m_Width * m_Height * Utils::BytesPerPixel(m_Format));
         if (data)
             SetData(data);
@@ -63,8 +62,7 @@ namespace Ouroboros {
     static size_t WriteImageCallback(void *contents, size_t size, size_t nmemb, void *userp) {
         auto *buffer = static_cast<std::vector<uint8_t> *>(userp);
         size_t realSize = size * nmemb;
-        buffer->insert(buffer->end(), static_cast<uint8_t *>(contents),
-                       static_cast<uint8_t *>(contents) + realSize);
+        buffer->insert(buffer->end(), static_cast<uint8_t *>(contents), static_cast<uint8_t *>(contents) + realSize);
         return realSize;
     }
 
@@ -104,8 +102,7 @@ namespace Ouroboros {
                 VkMemoryAllocateInfo alloc_info = {};
                 alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
                 alloc_info.allocationSize = req.size;
-                alloc_info.memoryTypeIndex = Utils::GetVulkanMemoryType(VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-                                                                        req.memoryTypeBits);
+                alloc_info.memoryTypeIndex = Utils::GetVulkanMemoryType(VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, req.memoryTypeBits);
                 err = vkAllocateMemory(device, &alloc_info, nullptr, &m_Memory);
                 Vulkan::inf_check_vk_result(err);
                 err = vkBindImageMemory(device, m_Image, m_Memory, 0);
@@ -144,15 +141,13 @@ namespace Ouroboros {
             }
 
             // Create the Descriptor Set:
-            m_DescriptorSet = (VkDescriptorSet) ImGui_ImplVulkan_AddTexture(
-                    m_Sampler, m_ImageView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            m_DescriptorSet = (VkDescriptorSet) ImGui_ImplVulkan_AddTexture(m_Sampler, m_ImageView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         }
     }
 
     void Image::Release() {
         Application::SubmitResourceFree(
-                [sampler = m_Sampler, imageView = m_ImageView, image = m_Image, memory = m_Memory, stagingBuffer =
-                    m_StagingBuffer, stagingBufferMemory = m_StagingBufferMemory]() {
+                [sampler = m_Sampler, imageView = m_ImageView, image = m_Image, memory = m_Memory, stagingBuffer = m_StagingBuffer, stagingBufferMemory = m_StagingBufferMemory]() {
                     if (const auto device = Application::GetDevice(); device.has_value()) {
                         vkDestroySampler(*device, sampler, nullptr);
                         vkDestroyImageView(*device, imageView, nullptr);
@@ -196,8 +191,7 @@ namespace Ouroboros {
                     VkMemoryAllocateInfo alloc_info = {};
                     alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
                     alloc_info.allocationSize = req.size;
-                    alloc_info.memoryTypeIndex = Utils::GetVulkanMemoryType(
-                            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, req.memoryTypeBits);
+                    alloc_info.memoryTypeIndex = Utils::GetVulkanMemoryType(VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, req.memoryTypeBits);
                     err = vkAllocateMemory(device, &alloc_info, nullptr, &m_StagingBufferMemory);
                     Vulkan::inf_check_vk_result(err);
                     err = vkBindBufferMemory(device, m_StagingBuffer, m_StagingBufferMemory, 0);
@@ -235,8 +229,7 @@ namespace Ouroboros {
                 copy_barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
                 copy_barrier.subresourceRange.levelCount = 1;
                 copy_barrier.subresourceRange.layerCount = 1;
-                vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0,
-                                     nullptr, 0, nullptr, 1, &copy_barrier);
+                vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &copy_barrier);
 
                 VkBufferImageCopy region = {};
                 region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -244,8 +237,7 @@ namespace Ouroboros {
                 region.imageExtent.width = m_Width;
                 region.imageExtent.height = m_Height;
                 region.imageExtent.depth = 1;
-                vkCmdCopyBufferToImage(command_buffer, m_StagingBuffer, m_Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                                       1, &region);
+                vkCmdCopyBufferToImage(command_buffer, m_StagingBuffer, m_Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 
                 VkImageMemoryBarrier use_barrier = {};
                 use_barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -259,8 +251,7 @@ namespace Ouroboros {
                 use_barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
                 use_barrier.subresourceRange.levelCount = 1;
                 use_barrier.subresourceRange.layerCount = 1;
-                vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_TRANSFER_BIT,
-                                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1, &use_barrier);
+                vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1, &use_barrier);
 
                 Application::FlushCommandBuffer(command_buffer);
             }
@@ -291,8 +282,7 @@ namespace Ouroboros {
     }
 
     void Image::RenderImage(const std::shared_ptr<Image> &image, const ImVec2 pos, const float scale) {
-        ImGui::GetWindowDrawList()->AddImage(image->GetDescriptorSet(), pos,
-                                             {pos.x + image->GetWidth() * scale, pos.y + image->GetHeight() * scale});
+        ImGui::GetWindowDrawList()->AddImage(image->GetDescriptorSet(), pos, {pos.x + image->GetWidth() * scale, pos.y + image->GetHeight() * scale});
     }
 
     void Image::RenderImage(const std::shared_ptr<Image> &image, const ImVec2 pos, const ImVec2 size) {
@@ -315,13 +305,11 @@ namespace Ouroboros {
 
         const float uv_x = 1.0f / aspect_shown;
 
-        ImGui::GetWindowDrawList()->AddImage(image->GetDescriptorSet(), pos, {pos.x + size.x, pos.y + size.y},
-                                             {0.5f - uv_x / 2.0f, 0.0f}, {0.5f + uv_x / 2.0f, 1.0f});
+        ImGui::GetWindowDrawList()->AddImage(image->GetDescriptorSet(), pos, {pos.x + size.x, pos.y + size.y}, {0.5f - uv_x / 2.0f, 0.0f}, {0.5f + uv_x / 2.0f, 1.0f});
     }
 
 
-    void Image::RenderHomeImage(const std::shared_ptr<Image> &image, const ImVec2 pos, const ImVec2 size,
-                                bool is_hovered) {
+    void Image::RenderHomeImage(const std::shared_ptr<Image> &image, const ImVec2 pos, const ImVec2 size, bool is_hovered) {
         if (!image)
             return;
 
@@ -357,11 +345,9 @@ namespace Ouroboros {
 
         // Update animation progress using the map
         if (is_hovered) {
-            s_animation_progress[id] = std::min(
-                    1.0f, s_animation_progress[id] + ImGui::GetIO().DeltaTime * animation_speed);
+            s_animation_progress[id] = std::min(1.0f, s_animation_progress[id] + ImGui::GetIO().DeltaTime * animation_speed);
         } else {
-            s_animation_progress[id] = std::max(
-                    0.0f, s_animation_progress[id] - ImGui::GetIO().DeltaTime * animation_speed);
+            s_animation_progress[id] = std::max(0.0f, s_animation_progress[id] - ImGui::GetIO().DeltaTime * animation_speed);
         }
 
         // Number of gradient segments
@@ -402,14 +388,8 @@ namespace Ouroboros {
 
             ImVec4 tint_color(1.0f, 1.0f, 1.0f, alpha);
 
-            draw_list->AddImage(
-                    image->GetDescriptorSet(),
-                    ImVec2(pos.x, y_start),
-                    ImVec2(pos.x + size.x, y_end),
-                    ImVec2(uv_left, uv_y_start),
-                    ImVec2(uv_right, uv_y_end),
-                    ImGui::ColorConvertFloat4ToU32(tint_color)
-                    );
+            draw_list->AddImage(image->GetDescriptorSet(), ImVec2(pos.x, y_start), ImVec2(pos.x + size.x, y_end), ImVec2(uv_left, uv_y_start), ImVec2(uv_right, uv_y_end),
+                                ImGui::ColorConvertFloat4ToU32(tint_color));
         }
     }
-}
+} // namespace Ouroboros

@@ -45,7 +45,5 @@ namespace Hydraulic::Component::Reservoir {
         LowPressureChamber m_LowPressureChamber;
         BootstrapCylinder m_BootstrapCylinder;
         Indicators m_Indicators;
-
     };
-}
-
+} // namespace Hydraulic::Component::Reservoir

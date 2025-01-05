@@ -5,9 +5,9 @@
 
 #include "Electrical/Electrical.hpp"
 #include "Hydraulic/Hydraulic.hpp"
-#include "Util/DeltaTime/DeltaTime.hpp"
 #include "Shared/SystemStruct.hpp"
 #include "Systems/Shared/State.hpp"
+#include "Util/DeltaTime/DeltaTime.hpp"
 #include "Util/VirtualCockpit/VirtualCockpit.hpp"
 
 using namespace std::chrono_literals;
@@ -39,6 +39,5 @@ namespace E170Systems {
             Update(m_DeltaTime);
             std::this_thread::sleep_for(17ms);
         }
-
     }
 } // namespace E170Systems

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <vector>
 #include <functional>
 #include <memory>
+#include <vector>
 
 #include "Electrical/Electrical.hpp"
 #include "Hydraulic/Hydraulic.hpp"

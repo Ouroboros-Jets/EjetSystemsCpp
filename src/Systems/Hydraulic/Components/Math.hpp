@@ -2,8 +2,8 @@
 #pragma once
 
 #include <cmath>
-#include <vector>
 #include <numeric>
+#include <vector>
 
 
 namespace Hydraulic::Math {
@@ -19,34 +19,22 @@ namespace Hydraulic::Math {
             return (PI * std::powf(pipeRadius, 4.0f) * deltaPressure) / (8.0f * viscosityOfFluidPa * length);
         }
 
-        static float pascalsLawP(const float force, const float area) {
-            return force / area;
-        }
+        static float pascalsLawP(const float force, const float area) { return force / area; }
 
-        static float pascalsLawF(const float pressurePa, const float area) {
-            return pressurePa * area;
-        }
+        static float pascalsLawF(const float pressurePa, const float area) { return pressurePa * area; }
 
-        static float hydraulicPower(const float flowRate, const float deltaPressure, const float efficiency) {
-            return flowRate * deltaPressure * efficiency;
-        }
+        static float hydraulicPower(const float flowRate, const float deltaPressure, const float efficiency) { return flowRate * deltaPressure * efficiency; }
 
-        static float density(const float mass, const float volume) {
-            return mass / volume;
-        }
+        static float density(const float mass, const float volume) { return mass / volume; }
 
-        static float dynamicViscosity(const float shearStress, const float shearRate) {
-            return shearStress / shearRate;
-        }
+        static float dynamicViscosity(const float shearStress, const float shearRate) { return shearStress / shearRate; }
 
         static float darcyLaw(const float flowRateLMin, const float permeability, const float crossSectionalArea, const float dynamicViscosity, const float lengthOfFilter) {
             const float flowRateLSec = flowRateLMin / 60.0f;
             return (flowRateLSec * dynamicViscosity * lengthOfFilter) / (permeability * crossSectionalArea);
         }
 
-        static float pressureFromTemperature(const float density, const float temperature, const float molarMass) {
-            return (density * 8.314f * temperature) / molarMass;
-        }
+        static float pressureFromTemperature(const float density, const float temperature, const float molarMass) { return (density * 8.314f * temperature) / molarMass; }
 
         static float pressurePaEstimated(const float density, const float volume, const std::vector<float> &crossSectionalAreas, const float flowRate) {
             const float netCrossSectionalArea = std::accumulate(crossSectionalAreas.begin(), crossSectionalAreas.end(), 0.0f);
@@ -63,5 +51,4 @@ namespace Hydraulic::Math {
             return pressurePa / PSI_TO_PA;
         }
     };
-}
-
+} // namespace Hydraulic::Math

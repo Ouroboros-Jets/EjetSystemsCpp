@@ -1,7 +1,7 @@
 #pragma once
 
-#include "System/System.hpp"
 #include "Shared/SystemStruct.hpp"
+#include "System/System.hpp"
 
 #include "Components/Accumulator.hpp"
 #include "Components/Actuator.hpp"
@@ -28,5 +28,4 @@ public:
 
 private:
     Variables::Hydraulic::HydraulicVars &m_HydraulicVars;
-
 };

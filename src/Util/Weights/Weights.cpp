@@ -1,8 +1,8 @@
 
 #include "Weights.hpp"
 
-#include <imgui.h>
 #include <fstream>
+#include <imgui.h>
 
 #ifdef _DEBUG
 void Weights::RenderImGui() {
@@ -40,12 +40,7 @@ void Weights::LoadFromFile(const std::string &file_name) {
 }
 
 void Weights::SaveToFile(const std::string &file_name) {
-    nlohmann::json j = {
-            {"Weight1", m_Weights.weight1},
-            {"Weight2", m_Weights.weight2}
-    };
+    nlohmann::json j = {{"Weight1", m_Weights.weight1}, {"Weight2", m_Weights.weight2}};
     std::ofstream file(file_name);
     file << j.dump(4);
 }
-
-

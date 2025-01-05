@@ -4,8 +4,7 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 
-static bool Throttle(const char *label, float *throttle, int *reverse_thrust, float width = 50.0f,
-                     float height = 200.0f, bool disabled = false) {
+static bool Throttle(const char *label, float *throttle, int *reverse_thrust, float width = 50.0f, float height = 200.0f, bool disabled = false) {
     ImGuiWindow *window = ImGui::GetCurrentWindow();
     if (window->SkipItems)
         return false;
@@ -34,10 +33,7 @@ static bool Throttle(const char *label, float *throttle, int *reverse_thrust, fl
 
     const float snap_threshold = 0.05f;
     const float snap_zone_height = (height * snap_threshold);
-    draw_list->AddRectFilled(
-            ImVec2(bb.Min.x, idle_y - snap_zone_height / 2),
-            ImVec2(bb.Max.x, idle_y + snap_zone_height / 2),
-            IM_COL32(70, 70, 70, 255), 5.0f);
+    draw_list->AddRectFilled(ImVec2(bb.Min.x, idle_y - snap_zone_height / 2), ImVec2(bb.Max.x, idle_y + snap_zone_height / 2), IM_COL32(70, 70, 70, 255), 5.0f);
 
 
     draw_list->AddLine(ImVec2(bb.Min.x, idle_y), ImVec2(bb.Max.x, idle_y), IM_COL32(200, 200, 200, 255), 2.0f);
@@ -77,14 +73,13 @@ static bool Throttle(const char *label, float *throttle, int *reverse_thrust, fl
         value_changed = true;
     }
 
-    draw_list->AddCircleFilled(handle_center, handle_radius,
-                               disabled ? IM_COL32(100, 100, 100, 255) : IM_COL32(200, 200, 200, 255));
+    draw_list->AddCircleFilled(handle_center, handle_radius, disabled ? IM_COL32(100, 100, 100, 255) : IM_COL32(200, 200, 200, 255));
 
     return value_changed;
 }
 
-static void DualThrottle(const char *label, float *throttle_a, int *reverse_a, float *throttle_b, int *reverse_b,
-                         bool split_throttles, float width = 50.0f, float height = 200.0f, float spacing = 10.0f) {
+static void DualThrottle(const char *label, float *throttle_a, int *reverse_a, float *throttle_b, int *reverse_b, bool split_throttles, float width = 50.0f, float height = 200.0f,
+                         float spacing = 10.0f) {
     ImGui::BeginGroup();
 
 

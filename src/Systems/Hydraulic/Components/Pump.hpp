@@ -1,7 +1,7 @@
 
 #pragma once
-#include "Units/Units.hpp"
 #include <cmath>
+#include "Units/Units.hpp"
 
 using namespace E170Systems::Units::FlowRate;
 
@@ -47,7 +47,7 @@ namespace Hydraulic::Component::HydraulicPump {
         bool m_DepressurizationSolenoidEnabled;
         float m_EngineRpm;
     };
-}
+} // namespace Hydraulic::Component::HydraulicPump
 
 inline float CalculatePressureFactor(const float Pressure, const float RatedPressure) {
     const float PressureRatio = Pressure / RatedPressure;

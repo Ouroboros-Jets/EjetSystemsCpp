@@ -1,20 +1,16 @@
 
 #pragma once
 
-#include <string>
-#include <memory>
-#include <vector>
 #include <map>
+#include <memory>
+#include <string>
+#include <vector>
 
 #include "imgui.h"
 #include "vulkan/vulkan.h"
 
 namespace Ouroboros {
-    enum class ImageFormat {
-        None = 0,
-        RGBA,
-        RGBA32F
-    };
+    enum class ImageFormat { None = 0, RGBA, RGBA32F };
 
     class Image {
     public:
@@ -46,7 +42,8 @@ namespace Ouroboros {
         static void RenderImage(const std::shared_ptr<Image> &image, ImVec2 pos, float scale);
 
         /// <summary>
-        /// Renders a pre-constructed image with a specified width and height. The image will always fill the height requirement (if the image width > specified width, the image will be clipped evenly left and right)
+        /// Renders a pre-constructed image with a specified width and height. The image will always fill the height requirement (if the image width > specified width, the image
+        /// will be clipped evenly left and right)
         /// </summary>
         /// <param name="image">Shared pointer to an Infinity::Image</param>
         /// <param name="pos">X any Y position to render the image</param>
@@ -89,15 +86,11 @@ namespace Ouroboros {
             return instance;
         }
 
-        void AddImage(const std::string &name, const std::shared_ptr<Image> &image) {
-            m_Images[name] = image;
-        }
+        void AddImage(const std::string &name, const std::shared_ptr<Image> &image) { m_Images[name] = image; }
 
-        const std::shared_ptr<Image> &GetImage(const std::string &name) const {
-            return m_Images.at(name);
-        }
+        const std::shared_ptr<Image> &GetImage(const std::string &name) const { return m_Images.at(name); }
 
     private:
         std::map<std::string, std::shared_ptr<Image>> m_Images;
     };
-}
+} // namespace Ouroboros

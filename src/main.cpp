@@ -2,8 +2,8 @@
 
 #include "Backend/Application/Application.hpp"
 #include "SystemsMain/SystemsMain.hpp"
-#include "Util/Weights/Weights.hpp"
 #include "Util/VirtualCockpit/VirtualCockpit.hpp"
+#include "Util/Weights/Weights.hpp"
 
 
 #include "Assets/Images/overhead.h"
@@ -45,8 +45,7 @@ namespace Ouroboros {
     };
 
     Application *CreateApplication(int argc, char **argv) {
-        const ApplicationSpecifications specifications = {"Ouroboros E170 Systems", 1440, 1026, 2560, 1440, 1440, 1026,
-                                                          true, true};
+        const ApplicationSpecifications specifications = {"Ouroboros E170 Systems", 1440, 1026, 2560, 1440, 1440, 1026, true, true};
         const auto app = new Application(specifications);
         app->PushLayer<RenderLayer>();
 
@@ -62,9 +61,6 @@ namespace Ouroboros {
         }
         return 0;
     }
-}
+} // namespace Ouroboros
 
-int main(const int argc, char **argv) {
-    Ouroboros::Main(argc, argv);
-}
-
+int main(const int argc, char **argv) { Ouroboros::Main(argc, argv); }

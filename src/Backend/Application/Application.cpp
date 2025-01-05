@@ -8,9 +8,9 @@
 #define GLFW_EXPOSE_NATIVE_X11
 #endif
 #include "Application.hpp"
+#include "Backend/ImGuiTheme/ImGuiTheme.hpp"
 #include "Backend/UiHelpers/UiHelpers.hpp"
 #include "Backend/VulkanManager/VulkanManager.hpp"
-#include "Backend/ImGuiTheme/ImGuiTheme.hpp"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_vulkan.h"
 #include "imgui_internal.h"
@@ -52,16 +52,15 @@ constexpr double FRAME_DURATION = 1.0 / FPS_CAP;
 GLFWwindow *Ouroboros::Application::s_WindowHandle = nullptr;
 
 
+#include "Assets/Fonts/Roboto-Bold.h"
+#include "Assets/Fonts/Roboto-Italic.h"
+#include "Assets/Fonts/Roboto-Regular.h"
+#include "Assets/Images/ouroborosIcon.h"
 #include "Assets/Images/overhead.h"
 #include "Assets/Images/pedestal.h"
-#include "Assets/Images/ouroborosIcon.h"
-#include "Assets/Fonts/Roboto-Bold.h"
-#include "Assets/Fonts/Roboto-Regular.h"
-#include "Assets/Fonts/Roboto-Italic.h"
 
 namespace Ouroboros {
-    Application::Application(ApplicationSpecifications applicationSpecification) :
-        m_Specification(std::move(applicationSpecification)) {
+    Application::Application(ApplicationSpecifications applicationSpecification) : m_Specification(std::move(applicationSpecification)) {
         s_Instance = this;
         Init();
     }
@@ -89,22 +88,18 @@ namespace Ouroboros {
         glfwGetMonitorPos(primaryMonitor, &monitorX, &monitorY);
 
 
-        m_WindowHandle = glfwCreateWindow(static_cast<int>(m_Specification.Width),
-                                          static_cast<int>(m_Specification.Height), m_Specification.Name.c_str(),
-                                          nullptr, nullptr);
+        m_WindowHandle = glfwCreateWindow(static_cast<int>(m_Specification.Width), static_cast<int>(m_Specification.Height), m_Specification.Name.c_str(), nullptr, nullptr);
 
         s_WindowHandle = m_WindowHandle;
 
 
-        glfwSetWindowSizeLimits(m_WindowHandle, static_cast<int>(m_Specification.MinWidth),
-                                static_cast<int>(m_Specification.MinHeight), static_cast<int>(m_Specification.MaxWidth),
+        glfwSetWindowSizeLimits(m_WindowHandle, static_cast<int>(m_Specification.MinWidth), static_cast<int>(m_Specification.MinHeight), static_cast<int>(m_Specification.MaxWidth),
                                 static_cast<int>(m_Specification.MaxHeight));
 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
         if (m_Specification.CenterWindow) {
-            glfwSetWindowPos(m_WindowHandle,
-                             static_cast<int>(monitorX + (videoMode->width - m_Specification.Width) / 2),
+            glfwSetWindowPos(m_WindowHandle, static_cast<int>(monitorX + (videoMode->width - m_Specification.Width) / 2),
                              static_cast<int>(monitorY + (videoMode->height - m_Specification.Height) / 2));
         }
 
@@ -183,13 +178,11 @@ namespace Ouroboros {
 
         ImFontConfig fontConfig;
         fontConfig.FontDataOwnedByAtlas = false;
-        ImFont *robotoFont = io.Fonts->AddFontFromMemoryTTF(g_RobotoRegular, sizeof(g_RobotoRegular), 20.0f,
-                                                            &fontConfig);
+        ImFont *robotoFont = io.Fonts->AddFontFromMemoryTTF(g_RobotoRegular, sizeof(g_RobotoRegular), 20.0f, &fontConfig);
         s_Fonts["Default"] = robotoFont;
         s_Fonts["Bold"] = io.Fonts->AddFontFromMemoryTTF(g_RobotoBold, sizeof(g_RobotoBold), 20.0f, &fontConfig);
         s_Fonts["Italic"] = io.Fonts->AddFontFromMemoryTTF(g_RobotoItalic, sizeof(g_RobotoItalic), 20.0f, &fontConfig);
-        s_Fonts["DefaultLarge"] = io.Fonts->AddFontFromMemoryTTF(g_RobotoRegular, sizeof(g_RobotoRegular), 40.0f,
-                                                                 &fontConfig);
+        s_Fonts["DefaultLarge"] = io.Fonts->AddFontFromMemoryTTF(g_RobotoRegular, sizeof(g_RobotoRegular), 40.0f, &fontConfig);
 
         io.FontDefault = robotoFont;
         {
@@ -300,8 +293,7 @@ namespace Ouroboros {
                 glfwGetFramebufferSize(m_WindowHandle, &width, &height);
                 if (width > 0 && height > 0) {
                     ImGui_ImplVulkan_SetMinImageCount(g_MinImageCount);
-                    ImGui_ImplVulkanH_CreateOrResizeWindow(g_Instance, g_PhysicalDevice, g_Device, &g_MainWindowData,
-                                                           g_QueueFamily, g_Allocator, width, height, g_MinImageCount);
+                    ImGui_ImplVulkanH_CreateOrResizeWindow(g_Instance, g_PhysicalDevice, g_Device, &g_MainWindowData, g_QueueFamily, g_Allocator, width, height, g_MinImageCount);
                     g_MainWindowData.FrameIndex = 0;
 
                     s_AllocatedCommandBuffers.clear();
@@ -325,8 +317,7 @@ namespace Ouroboros {
                 ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 4.0f);
                 ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
                 ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-                window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
-                        ImGuiWindowFlags_NoMove;
+                window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
                 window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
 
@@ -345,8 +336,7 @@ namespace Ouroboros {
             // Rendering
             ImGui::Render();
             ImDrawData *main_draw_data = ImGui::GetDrawData();
-            const bool main_is_minimized = (main_draw_data->DisplaySize.x <= 0.0f || main_draw_data->DisplaySize.y <=
-                                            0.0f);
+            const bool main_is_minimized = (main_draw_data->DisplaySize.x <= 0.0f || main_draw_data->DisplaySize.y <= 0.0f);
             wd->ClearValue.color.float32[0] = clear_color.x * clear_color.w;
             wd->ClearValue.color.float32[1] = clear_color.y * clear_color.w;
             wd->ClearValue.color.float32[2] = clear_color.z * clear_color.w;
@@ -387,9 +377,7 @@ namespace Ouroboros {
 
     void Application::Close() { m_Running = false; }
 
-    bool Application::IsMaximized() const {
-        return static_cast<bool>(glfwGetWindowAttrib(m_WindowHandle, GLFW_MAXIMIZED));
-    }
+    bool Application::IsMaximized() const { return static_cast<bool>(glfwGetWindowAttrib(m_WindowHandle, GLFW_MAXIMIZED)); }
 
     float Application::GetTime() { return static_cast<float>(glfwGetTime()); }
 
@@ -463,9 +451,7 @@ namespace Ouroboros {
         vkDestroyFence(g_Device, fence, nullptr);
     }
 
-    void Application::SubmitResourceFree(std::function<void()> &&func) {
-        s_ResourceFreeQueue[s_CurrentFrameIndex].emplace_back(func);
-    }
+    void Application::SubmitResourceFree(std::function<void()> &&func) { s_ResourceFreeQueue[s_CurrentFrameIndex].emplace_back(func); }
 
     ImFont *Application::GetFont(const std::string &name) {
         if (!s_Fonts.contains(name))
@@ -481,4 +467,4 @@ namespace Ouroboros {
     }
 
 
-} // namespace Infinity
+} // namespace Ouroboros

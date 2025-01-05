@@ -5,9 +5,7 @@
 
 
 namespace Hydraulic::Component::FilterManifold {
-    FilterManifold::FilterManifold(const Pascal Resistance, const Micron FilterSize): m_Resistance(Resistance),
-                                                                                      m_FilterSize(FilterSize) {
-    }
+    FilterManifold::FilterManifold(const Pascal Resistance, const Micron FilterSize) : m_Resistance(Resistance), m_FilterSize(FilterSize) {}
 
     PSI FilterManifold::CalculatePressureDrop(const LiterPerMinute FlowRate, const NewtonSecondPerSquareMeter DynamicViscocity) const {
         constexpr float Permability = 1.5e-2f;
@@ -15,4 +13,4 @@ namespace Hydraulic::Component::FilterManifold {
 
         return Math::HydraulicMath::darcyLaw(FlowRate, Permability, CrossSectionalArea, DynamicViscocity, m_FilterSize);
     }
-}
+} // namespace Hydraulic::Component::FilterManifold

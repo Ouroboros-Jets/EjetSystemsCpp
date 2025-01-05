@@ -2,26 +2,22 @@
 #pragma once
 #include <cmath>
 
-#include "Units/Units.hpp"
 #include "Hydraulic/Components/Math.hpp"
+#include "Units/Units.hpp"
 
 
 namespace E170Systems::Electrical::Util {
     /*
-    * Ohm's Law: Relationship between voltage, current, and resistance
-    *  I(current) = V(volatage)/ R(resistance)
-    */
-    inline Units::ElectricCurrent::Ampere OhmLawCurrent(const E170Systems::Units::Voltage::Volt volts, const Units::Resistance::Ohm resistance) {
-        return volts / resistance;
-    }
+     * Ohm's Law: Relationship between voltage, current, and resistance
+     *  I(current) = V(volatage)/ R(resistance)
+     */
+    inline Units::ElectricCurrent::Ampere OhmLawCurrent(const E170Systems::Units::Voltage::Volt volts, const Units::Resistance::Ohm resistance) { return volts / resistance; }
 
     /*
      * Power in a DC circuit
      * P(Watts) = V(voltage) * C(current)
      */
-    inline Units::Power::Watt PowerDC(const Units::Voltage::Volt volts, const Units::ElectricCurrent::Ampere current) {
-        return volts * current;
-    }
+    inline Units::Power::Watt PowerDC(const Units::Voltage::Volt volts, const Units::ElectricCurrent::Ampere current) { return volts * current; }
 
     /*
      * Power in an AC circuit
@@ -35,9 +31,7 @@ namespace E170Systems::Electrical::Util {
      * Apparent power (S) in AC circuits.
      * S = V * I
      */
-    inline Units::Power::Watt ApperentACPower(const Units::Voltage::Volt volt, const Units::ElectricCurrent::Ampere current) {
-        return volt * current;
-    }
+    inline Units::Power::Watt ApperentACPower(const Units::Voltage::Volt volt, const Units::ElectricCurrent::Ampere current) { return volt * current; }
 
 
     /*
@@ -60,9 +54,7 @@ namespace E170Systems::Electrical::Util {
      * Calculates the reactance of an inductor at a given frequency.
      *  Xl = 2πfL
      */
-    inline Units::Resistance::Ohm InductiveReactance(const Units::Inductance::Henry inductance, const float frequency) {
-        return 2 * Hydraulic::Math::PI * frequency * inductance;
-    }
+    inline Units::Resistance::Ohm InductiveReactance(const Units::Inductance::Henry inductance, const float frequency) { return 2 * Hydraulic::Math::PI * frequency * inductance; }
 
     /*
      * Calculates the impedance (Z) of a circuit containing resistance and reactance.
@@ -76,9 +68,7 @@ namespace E170Systems::Electrical::Util {
      * Energy stored in a capacitor based on capacitance and voltage.
      * E = 0.5 * C * V²
      */
-    inline Units::Energy::Joule CapacitorEnerg(const Units::Capacitance::Farad capacatance, const Units::Voltage::Volt voltage) {
-        return 0.5f * capacatance * powf(voltage, 2.0f);
-    }
+    inline Units::Energy::Joule CapacitorEnerg(const Units::Capacitance::Farad capacatance, const Units::Voltage::Volt voltage) { return 0.5f * capacatance * powf(voltage, 2.0f); }
 
     /*
      * Energy stored in an inductor based on inductance and current.
@@ -101,9 +91,9 @@ namespace E170Systems::Electrical::Util {
     }
 
     /*
-    *Kirchhoff's Current Law (KCL)
-    *Sum of currents entering a node equals the sum of currents leaving.
-    */
+     *Kirchhoff's Current Law (KCL)
+     *Sum of currents entering a node equals the sum of currents leaving.
+     */
     inline Units::ElectricCurrent::Ampere KirchhoffCurrentLaw(const std::vector<Units::ElectricCurrent::Ampere> &currents) {
         float sum = 0.0f;
         for (const double current: currents) {
@@ -113,60 +103,40 @@ namespace E170Systems::Electrical::Util {
     }
 
     /*
-    *DC Voltage Divider
-    * Voltage across a resistor in a series circuit.
-    * Vout = (R / Rtotal) * Vtotal
-    */
+     *DC Voltage Divider
+     * Voltage across a resistor in a series circuit.
+     * Vout = (R / Rtotal) * Vtotal
+     */
     inline Units::Voltage::Volt DCVoltageDivider(const Units::Voltage::Volt totalVoltage, const Units::Resistance::Ohm resistance, const Units::Resistance::Ohm totalResistance) {
         return (resistance / totalResistance) * totalVoltage;
     }
 
     /*
-    *AC Voltage Divider (Impedance-Based)
-    *Voltage across a component in a series AC circuit, considering impedance.
-    *Vout = (Z / Ztotal) * Vtotal
-    */
+     *AC Voltage Divider (Impedance-Based)
+     *Voltage across a component in a series AC circuit, considering impedance.
+     *Vout = (Z / Ztotal) * Vtotal
+     */
     inline Units::Voltage::Volt ACVoltageDivider(const Units::Voltage::Volt totalVoltage, const Units::Resistance::Ohm impedance, const Units::Resistance::Ohm totalImpedance) {
         return (impedance / totalImpedance) * totalVoltage;
     }
 
     /*
-    *RMS (Root Mean Square) Voltage
-    *Converts peak voltage to RMS voltage.
-    * Vrms = Vpeak / √2
-    */
-    inline Units::Voltage::Volt RmsVoltage(const Units::Voltage::Volt peakVoltage) {
-        return peakVoltage / sqrtf(2.0f);
-    }
+     *RMS (Root Mean Square) Voltage
+     *Converts peak voltage to RMS voltage.
+     * Vrms = Vpeak / √2
+     */
+    inline Units::Voltage::Volt RmsVoltage(const Units::Voltage::Volt peakVoltage) { return peakVoltage / sqrtf(2.0f); }
 
     /*
-    *RMS (Root Mean Square) Current
-    *Converts peak current to RMS current.
-    *Irms = Ipeak / √2
-    */
-    inline Units::ElectricCurrent::Ampere RmsCurrent(Units::ElectricCurrent::Ampere peakCurrent) {
-        return peakCurrent / sqrtf(2.0f);
-    }
+     *RMS (Root Mean Square) Current
+     *Converts peak current to RMS current.
+     *Irms = Ipeak / √2
+     */
+    inline Units::ElectricCurrent::Ampere RmsCurrent(Units::ElectricCurrent::Ampere peakCurrent) { return peakCurrent / sqrtf(2.0f); }
 
     /*
      *Efficiency
      *Percent/100
      */
-    inline float efficiency(const Units::Power::Watt inputPower, const Units::Power::Watt outputPower) {
-        return (outputPower / inputPower) * 100;
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    inline float efficiency(const Units::Power::Watt inputPower, const Units::Power::Watt outputPower) { return (outputPower / inputPower) * 100; }
+} // namespace E170Systems::Electrical::Util

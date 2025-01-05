@@ -19,6 +19,4 @@ public:
 
 protected:
     ~System() = default;
-
-
 };

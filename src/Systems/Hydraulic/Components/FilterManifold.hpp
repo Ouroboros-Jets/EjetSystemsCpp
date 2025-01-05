@@ -18,5 +18,4 @@ namespace Hydraulic::Component::FilterManifold {
         Pascal m_Resistance;
         Micron m_FilterSize;
     };
-}
-
+} // namespace Hydraulic::Component::FilterManifold

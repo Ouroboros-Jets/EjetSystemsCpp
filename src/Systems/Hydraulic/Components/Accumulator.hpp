@@ -19,5 +19,4 @@ namespace Hydraulic::Component::Accumulator {
         Liter m_MaxCapacity;
         Liter m_CurrentCapacity;
     };
-}
-
+} // namespace Hydraulic::Component::Accumulator

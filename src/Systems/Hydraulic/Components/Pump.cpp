@@ -3,10 +3,7 @@
 
 
 namespace Hydraulic::Component::HydraulicPump {
-    AcMotorPump::AcMotorPump(): m_RatedOutputFlow(71.92f),
-                                m_Powered(false),
-                                m_PressureOverride(false) {
-    }
+    AcMotorPump::AcMotorPump() : m_RatedOutputFlow(71.92f), m_Powered(false), m_PressureOverride(false) {}
 
     float AcMotorPump::GetOutput(const float dt, const float Pressure) const {
         if (!m_Powered) {
@@ -22,13 +19,9 @@ namespace Hydraulic::Component::HydraulicPump {
         return VolumeFlowRateM3s;
     }
 
-    EngineDrivenPump::EngineDrivenPump(): m_RatedOutputFlow(71.92f),
-                                          m_OperatingRPM(4825.0f),
-                                          m_OperatingTemperature(TempRange{.min = -54.0f, .max = 85.0f}),
-                                          m_ConpensatorEnabled(true),
-                                          m_DepressurizationSolenoidEnabled(false),
-                                          m_EngineRpm(0.0f) {
-    }
+    EngineDrivenPump::EngineDrivenPump() :
+        m_RatedOutputFlow(71.92f), m_OperatingRPM(4825.0f), m_OperatingTemperature(TempRange{.min = -54.0f, .max = 85.0f}), m_ConpensatorEnabled(true),
+        m_DepressurizationSolenoidEnabled(false), m_EngineRpm(0.0f) {}
 
     float EngineDrivenPump::GetLeakback() const {
         if (!m_ConpensatorEnabled) {
@@ -54,4 +47,4 @@ namespace Hydraulic::Component::HydraulicPump {
 
         return VolumeFlowRateM3s * dt;
     }
-}
+} // namespace Hydraulic::Component::HydraulicPump

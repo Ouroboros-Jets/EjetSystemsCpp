@@ -42,24 +42,14 @@ static bool CircuitBreakerUI(const char *label, bool *state, float width = 40.0f
         color.z = ImMin(color.z * 1.2f, 1.0f);
     }
 
-    draw_list->AddRectFilled(ImVec2(bb.Min.x + 5, bb.Min.y + 5),
-                             ImVec2(bb.Max.x - 5, bb.Max.y - 5),
-                             ImGui::ColorConvertFloat4ToU32(color),
-                             5.0f);
+    draw_list->AddRectFilled(ImVec2(bb.Min.x + 5, bb.Min.y + 5), ImVec2(bb.Max.x - 5, bb.Max.y - 5), ImGui::ColorConvertFloat4ToU32(color), 5.0f);
 
     float switch_y = *state ? (bb.Min.y + height * 0.5f) : (bb.Min.y + height * 0.75f);
 
-    draw_list->AddCircleFilled(
-            ImVec2(bb.Min.x + width * 0.5f, switch_y),
-            width * 0.3f,
-            IM_COL32(240, 240, 240, 255)
-            );
+    draw_list->AddCircleFilled(ImVec2(bb.Min.x + width * 0.5f, switch_y), width * 0.3f, IM_COL32(240, 240, 240, 255));
 
     if (label[0] != '\0') {
-        ImGui::RenderText(
-                ImVec2(bb.Min.x + width + 10, bb.Min.y + height * 0.5f - ImGui::GetTextLineHeight() * 0.5f),
-                label
-                );
+        ImGui::RenderText(ImVec2(bb.Min.x + width + 10, bb.Min.y + height * 0.5f - ImGui::GetTextLineHeight() * 0.5f), label);
     }
 
     if (hovered) {

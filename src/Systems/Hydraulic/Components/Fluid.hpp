@@ -53,4 +53,4 @@ namespace Hydraulic::Component::Fluid {
         ParticulateContamination m_ParticulateContamination;
         float m_WaterContentPpm;
     };
-}
+} // namespace Hydraulic::Component::Fluid

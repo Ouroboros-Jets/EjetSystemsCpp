@@ -175,7 +175,7 @@ struct FlightControlState {
         int aileron_disconnect_switch{0};
 
 
-        //TODO: trim, cockpit door ig,
+        // TODO: trim, cockpit door ig,
 
     } pedestal;
 };

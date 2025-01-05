@@ -2,8 +2,8 @@
 #pragma once
 
 
-#include "Backend/Layer/Layer.hpp"
 #include "Backend/Image/Image.hpp"
+#include "Backend/Layer/Layer.hpp"
 
 #include <filesystem>
 #include <functional>
@@ -133,4 +133,4 @@ namespace Ouroboros {
     };
 
     Application *CreateApplication(int argc, char **argv);
-} // namespace Infinity
+} // namespace Ouroboros

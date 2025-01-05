@@ -44,5 +44,4 @@ void HydraulicSystem::Update(float dt) {
     delete system1Reservoir;
     delete system1EngineDrivenPump;
     delete system1AcMotorPump;
-
 }

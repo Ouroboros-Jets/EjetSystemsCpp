@@ -3,8 +3,7 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 
-static bool Slider(const char *label, float *value, float width = 50.0f, float height = 200.0f, bool invert = false,
-                   bool disabled = false) {
+static bool Slider(const char *label, float *value, float width = 50.0f, float height = 200.0f, bool invert = false, bool disabled = false) {
     ImGuiWindow *window = ImGui::GetCurrentWindow();
     if (window->SkipItems)
         return false;
@@ -38,9 +37,7 @@ static bool Slider(const char *label, float *value, float width = 50.0f, float h
         ImGui::RenderText(ImVec2(bb.Min.x, bb.Max.y + 5), "MIN");
     }
 
-    float handle_y = invert
-                         ? bb.Min.y + (*value) * height
-                         : bb.Max.y - (*value) * height;
+    float handle_y = invert ? bb.Min.y + (*value) * height : bb.Max.y - (*value) * height;
 
     const float handle_radius = width * 0.4f;
     ImVec2 handle_center(bb.Min.x + width * 0.5f, handle_y);
@@ -58,8 +55,7 @@ static bool Slider(const char *label, float *value, float width = 50.0f, float h
         value_changed = true;
     }
 
-    draw_list->AddCircleFilled(handle_center, handle_radius,
-                               disabled ? IM_COL32(100, 100, 100, 255) : IM_COL32(200, 200, 200, 255));
+    draw_list->AddCircleFilled(handle_center, handle_radius, disabled ? IM_COL32(100, 100, 100, 255) : IM_COL32(200, 200, 200, 255));
 
     return value_changed;
 }

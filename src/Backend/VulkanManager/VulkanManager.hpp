@@ -11,8 +11,6 @@
 
 
 namespace Ouroboros::Vulkan {
-
-
     static VkAllocationCallbacks *g_Allocator = nullptr;
     static VkInstance g_Instance = VK_NULL_HANDLE;
     static VkPhysicalDevice g_PhysicalDevice = VK_NULL_HANDLE;
@@ -170,8 +168,7 @@ namespace Ouroboros::Vulkan {
         }
     }
 
-    static void SetupVulkanWindow(ImGui_ImplVulkanH_Window *a_Window, VkSurfaceKHR a_Surface, const int width,
-                                  const int height) {
+    static void SetupVulkanWindow(ImGui_ImplVulkanH_Window *a_Window, VkSurfaceKHR a_Surface, const int width, const int height) {
         a_Window->Surface = a_Surface;
 
         VkBool32 res;
@@ -180,27 +177,21 @@ namespace Ouroboros::Vulkan {
             fprintf(stderr, "Error no WSI support on GPU 0 \n");
             exit(-1);
         }
-        constexpr VkFormat requestSurfaceImageFormat[] = {VK_FORMAT_B8G8R8A8_UNORM, VK_FORMAT_R8G8B8A8_UNORM,
-                                                          VK_FORMAT_A8B8G8R8_UNORM_PACK32, VK_FORMAT_B8G8R8_UNORM,
+        constexpr VkFormat requestSurfaceImageFormat[] = {VK_FORMAT_B8G8R8A8_UNORM, VK_FORMAT_R8G8B8A8_UNORM, VK_FORMAT_A8B8G8R8_UNORM_PACK32, VK_FORMAT_B8G8R8_UNORM,
                                                           VK_FORMAT_R8G8B8_UNORM};
 
         constexpr VkColorSpaceKHR requestSurfaceColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
-        a_Window->SurfaceFormat = ImGui_ImplVulkanH_SelectSurfaceFormat(g_PhysicalDevice, a_Window->Surface,
-                                                                        requestSurfaceImageFormat,
-                                                                        static_cast<size_t>(IM_ARRAYSIZE(
-                                                                                requestSurfaceImageFormat)),
-                                                                        requestSurfaceColorSpace);
+        a_Window->SurfaceFormat = ImGui_ImplVulkanH_SelectSurfaceFormat(g_PhysicalDevice, a_Window->Surface, requestSurfaceImageFormat,
+                                                                        static_cast<size_t>(IM_ARRAYSIZE(requestSurfaceImageFormat)), requestSurfaceColorSpace);
 
 #ifdef IMGUI_UNLIMITED_FRAME_RATE
         VkPresentModeKHR present_modes[] = {VK_PRESENT_MODE_MAILBOX_KHR, VK_PRESENT_MODE_IMMEDIATE_KHR, VK_PRESENT_MODE_FIFO_KHR};
 #else
         VkPresentModeKHR present_modes[] = {VK_PRESENT_MODE_FIFO_KHR};
 #endif
-        a_Window->PresentMode = ImGui_ImplVulkanH_SelectPresentMode(g_PhysicalDevice, a_Window->Surface,
-                                                                    &present_modes[0], IM_ARRAYSIZE(present_modes));
+        a_Window->PresentMode = ImGui_ImplVulkanH_SelectPresentMode(g_PhysicalDevice, a_Window->Surface, &present_modes[0], IM_ARRAYSIZE(present_modes));
         IM_ASSERT(g_MinImageCount >= 2);
-        ImGui_ImplVulkanH_CreateOrResizeWindow(g_Instance, g_PhysicalDevice, g_Device, a_Window, g_QueueFamily,
-                                               g_Allocator, width, height, g_MinImageCount);
+        ImGui_ImplVulkanH_CreateOrResizeWindow(g_Instance, g_PhysicalDevice, g_Device, a_Window, g_QueueFamily, g_Allocator, width, height, g_MinImageCount);
     }
 
 
@@ -216,18 +207,13 @@ namespace Ouroboros::Vulkan {
         vkDestroyInstance(g_Instance, g_Allocator);
     }
 
-    static void CleanupVulkanWindow() {
-        ImGui_ImplVulkanH_DestroyWindow(g_Instance, g_Device, &g_MainWindowData, g_Allocator);
-    }
+    static void CleanupVulkanWindow() { ImGui_ImplVulkanH_DestroyWindow(g_Instance, g_Device, &g_MainWindowData, g_Allocator); }
 
     static void FrameRender(ImGui_ImplVulkanH_Window *a_Window, ImDrawData *draw_data) {
 
-        VkSemaphore image_acquired_semaphore = a_Window->FrameSemaphores[a_Window->SemaphoreIndex].
-                ImageAcquiredSemaphore;
-        VkSemaphore render_complete_semaphore = a_Window->FrameSemaphores[a_Window->SemaphoreIndex].
-                RenderCompleteSemaphore;
-        VkResult err = vkAcquireNextImageKHR(g_Device, a_Window->Swapchain, UINT64_MAX, image_acquired_semaphore,
-                                             VK_NULL_HANDLE, &a_Window->FrameIndex);
+        VkSemaphore image_acquired_semaphore = a_Window->FrameSemaphores[a_Window->SemaphoreIndex].ImageAcquiredSemaphore;
+        VkSemaphore render_complete_semaphore = a_Window->FrameSemaphores[a_Window->SemaphoreIndex].RenderCompleteSemaphore;
+        VkResult err = vkAcquireNextImageKHR(g_Device, a_Window->Swapchain, UINT64_MAX, image_acquired_semaphore, VK_NULL_HANDLE, &a_Window->FrameIndex);
         if (err == VK_ERROR_OUT_OF_DATE_KHR || err == VK_SUBOPTIMAL_KHR) {
             g_SwapChainRebuild = true;
             return;
@@ -253,8 +239,7 @@ namespace Ouroboros::Vulkan {
         {
             auto &allocatedCommandBuffers = s_AllocatedCommandBuffers[a_Window->FrameIndex];
             if (!allocatedCommandBuffers.empty()) {
-                vkFreeCommandBuffers(g_Device, fd->CommandPool, static_cast<uint32_t>(allocatedCommandBuffers.size()),
-                                     allocatedCommandBuffers.data());
+                vkFreeCommandBuffers(g_Device, fd->CommandPool, static_cast<uint32_t>(allocatedCommandBuffers.size()), allocatedCommandBuffers.data());
                 allocatedCommandBuffers.clear();
             }
 
@@ -320,8 +305,6 @@ namespace Ouroboros::Vulkan {
         wd->SemaphoreIndex = (wd->SemaphoreIndex + 1) % wd->ImageCount;
     }
 
-    static void glfw_error_callback(const int error, const char *description) {
-        fprintf(stderr, "Glfw Error %d: %s\n", error, description);
-    }
+    static void glfw_error_callback(const int error, const char *description) { fprintf(stderr, "Glfw Error %d: %s\n", error, description); }
 
-} // namespace InfinityRenderer::Vulkan
+} // namespace Ouroboros::Vulkan

@@ -7,7 +7,8 @@
 namespace Electrical::Component {
     class GenericAcComponent final : public ElectricalComponent {
     public:
-        explicit GenericAcComponent(const char *name, E170Systems::Units::Voltage::Volt requriedVoltage, E170Systems::Units::ElectricCurrent::Ampere circuitBreaker, CircuitBreakerID CircuitBreakerId);
+        explicit GenericAcComponent(const char *name, E170Systems::Units::Voltage::Volt requriedVoltage, E170Systems::Units::ElectricCurrent::Ampere circuitBreaker,
+                                    CircuitBreakerID CircuitBreakerId);
 
         ~GenericAcComponent() override;
 
@@ -26,4 +27,4 @@ namespace Electrical::Component {
         E170Systems::Units::Voltage::Volt m_Voltage;
         E170Systems::Units::Voltage::Volt m_RequiredVoltage;
     };
-}
+} // namespace Electrical::Component

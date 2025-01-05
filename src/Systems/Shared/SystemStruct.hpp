@@ -29,15 +29,11 @@ namespace E170Systems::Variables {
             System1Vars System1;
         };
 
-    }
+    } // namespace Hydraulic
+
+    namespace Electrical {}
 
     namespace Electrical {
-
-    }
-
-    namespace Electrical {
-        struct ElectricalSystemVars {
-
-        };
-    }
-}
+        struct ElectricalSystemVars {};
+    } // namespace Electrical
+} // namespace E170Systems::Variables

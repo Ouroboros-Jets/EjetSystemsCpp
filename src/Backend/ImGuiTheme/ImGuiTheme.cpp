@@ -86,4 +86,4 @@ namespace Ouroboros {
         style.WindowBorderSize = 2.0f;
         style.IndentSpacing = 11.0f;
     }
-} // namespace Infinity
+} // namespace Ouroboros
